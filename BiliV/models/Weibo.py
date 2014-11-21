@@ -6,6 +6,7 @@ from BiliV.foundation import db
 from BiliV.models import User
 
 class Weibo(db.Model):
+	__tablename__ = 'Weibo'
 	id = db.Column(db.Integer, primary_key = True)
 	uid = db.Column(db.Integer, db.ForeignKey('User.id'))
 	access_token = db.Column(db.Text)

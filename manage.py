@@ -3,7 +3,9 @@ from BiliV import create_app
 from BiliV.foundation import db
 from BiliV.models import User, Weibo
 
-manager = Manager(create_app())
+app_ = create_app()
+app_.debug = True
+manager = Manager(app_)
 
 manager.add_command("runserver", Server('0.0.0.0', port = 5000))
 
@@ -19,12 +21,12 @@ def _addUser(uid, access_token):
 @manager.command
 def createall():
 	db.create_all()
-	_addUser('admin', 'admin')
+	#_addUser('admin', 'admin')
 
 @manager.command
 def dropall():
 	if prompt_bool("Are you sure? You will lose all your data!"):
 		db.drop_all()
 
-if __name__ == "__main__"
-manager.run()
+if __name__ == "__main__":
+	manager.run()

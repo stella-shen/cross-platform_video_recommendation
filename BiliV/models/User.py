@@ -9,6 +9,7 @@ from BiliV.foundation import db
 #from BiliV.permissions import admin_permission, auth_permission
 
 class User(db.Model):
+    __tablename__ = 'User'
     id = db.Column(db.Integer, primary_key = True)
     access_token = db.Column(db.Text)
     screen_name = db.Column(db.Text)

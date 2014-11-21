@@ -1,4 +1,4 @@
-from flask.ext.sqlalchemy import sqlalchemy
+from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 
 db = SQLAlchemy()

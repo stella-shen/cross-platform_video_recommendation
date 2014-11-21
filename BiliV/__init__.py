@@ -8,24 +8,20 @@ from BiliV.models import User, Weibo
 
 DEFAULT_APP_NAME = 'BiliV'
 
-DEFAULT_MODULES = (
-	(views.frontend, ""
-	 views.auth, "/auth")
-)
+DEFAULT_MODULES = [
+	views.frontend, 
+	#views.auth,
+]
 
 def create_app():
-	if modules is None:
-		modules = DEFAULT_MODULES
-
 	app = Flask(DEFAULT_APP_NAME)
-
 	app.config.from_object('config')
 	configure_foundations(app)
 	configure_blueprint(app, DEFAULT_MODULES)
 	configure_template_filter(app)
 	return app
 
-def configure_foundation(app):
+def configure_foundations(app):
 	db.app = app
 	db.init_app(app)
 	@app.after_request
@@ -43,7 +39,8 @@ def configure_foundation(app):
 	@app.before_request
 	def before_request():
 		g.user = current_user
-		if g.user.is_authenticated():
+		print g.user
+		if g.user != None and g.user.is_authenticated():
 			g.user.update_time = datetime.utcnow()
 			db.session.add(g.user)
 			db.session.commit()

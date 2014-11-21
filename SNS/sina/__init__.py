@@ -16,6 +16,6 @@ from .cache import Cache, MemoryCache, FileCache
 from .auth import BasicAuthHandler, OAuthHandler
 from .streaming import Stream, StreamListener
 from .cursor import Cursor
-
+from .privateOAuth import privateOAuth
 
 

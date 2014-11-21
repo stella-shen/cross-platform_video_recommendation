@@ -15,7 +15,7 @@ class API(object):
     """Mblog API"""
 
     def __init__(self, auth_handler=None,
-            host='api.t.sina.com.cn', search_host='api.t.sina.com.cn',
+            host='https://api.weibo.com/2', search_host='https://api.weibo.com/2',
              cache=None, secure=False, api_root='', search_root='',
             retry_count=0, retry_delay=0, retry_errors=None,source=None,
             parser=None, log = None):
