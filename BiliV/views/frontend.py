@@ -24,6 +24,8 @@ def login():
 	
 @frontend.route('/callback')
 def callback():
+	code = request.args.get('code', 0)
+	print code
 	return
 
 @frontend.route('/show')
