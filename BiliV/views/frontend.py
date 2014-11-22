@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, g
+from flask import Blueprint, render_template, redirect, url_for, flash, request, g, session
 from BiliV.models import User, Weibo
 from flask.ext.login import login_user, logout_user, login_required
 from SNS import sina
