@@ -4,7 +4,7 @@ class privateOAuth(object):
 	auth_host = 'https://api.weibo.com'
 	auth_root = '/oauth2/authorize?'
 
-	def __init__(self, app_key, app_secret, call_back_url, code):
+	def __init__(self, app_key, app_secret, call_back_url, code = None):
 		self.app_key = app_key
 		self.app_secret = app_secret
 		self.call_back_url = call_back_url
