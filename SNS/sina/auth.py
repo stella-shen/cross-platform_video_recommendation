@@ -50,12 +50,8 @@ class OAuthHandler(AuthHandler):
         self.secure = secure
 
     def _get_oauth_url(self, endpoint):
-        if self.secure:
-            prefix = 'https://'
-        else:
-            prefix = 'http://'
-
-        return prefix + self.OAUTH_HOST + self.OAUTH_ROOT + endpoint
+		prefix = "https://"
+		return prefix + self.OAUTH_HOST + self.OAUTH_ROOT + endpoint
 
     def apply_auth(self, url, method, headers, parameters):
         request = oauth.OAuthRequest.from_consumer_and_token(
@@ -91,17 +87,11 @@ class OAuthHandler(AuthHandler):
     def set_access_token(self, key, secret):
         self.access_token = oauth.OAuthToken(key, secret)
 
-    def get_authorization_url(self, signin_with_twitter=False):
+    def get_authorization_url(self):
         """Get the authorization URL to redirect the user"""
         try:
-            # get the request token
             self.request_token = self._get_request_token()
-
-            # build auth request and return as url
-            if signin_with_twitter:
-                url = self._get_oauth_url('authenticate')
-            else:
-                url = self._get_oauth_url('authorize')
+            url = self._get_oauth_url('authorize')
             request = oauth.OAuthRequest.from_token_and_callback(
                 token=self.request_token, http_url=url, callback=self.callback
             )

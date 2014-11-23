@@ -16,15 +16,11 @@ def index():
 @frontend.route('/login', methods = ['GET', 'POST'])
 def login():
 	if g.user is not None and g.user.is_authenticated is True:
-		return redirect(url_for('.show'))
-	
-	pOAuth = sina.privateOAuth(APP_KEY, APP_SECRET, CALLBACK_URL)
-	print "test"
-	authorize_url = pOAuth.get_auth_url()
-	path = redirect(authorize_url)
-	code = request.args.get('code', 0)
-	session['code'] = code
-	return path
+		return redirect(url_for('.callback'))
+	auth = sina.privateOAuth(APP_KEY, APP_SECRET, CALLBACK_URL)
+	authorize_url = auth.get_auth_url()
+	#print code
+	return redirect(authorize_url)
 	
 @frontend.route('/callback', methods = ['GET', 'POST'])
 def callback():
