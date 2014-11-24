@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request,
 from BiliV.models import User, Weibo
 from flask.ext.login import login_user, logout_user, login_required
 from SNS import sina
+import json
 
 frontend = Blueprint('frontend', __name__, template_folder = 'templates')
 
@@ -26,13 +27,20 @@ def callback():
 	code = request.args.get('code', 0)
 	session['code'] = code
 	accessOauth = sina.privateOAuth(APP_KEY, APP_SECRET, CALLBACK_URL, code)
-	access_token = accessOauth.get_access_token()
-	return access_token
-
-@frontend.route('/access_token', methods = ['POST'])
-def access_token():
-
-	return request.data 
+	text = accessOauth.get_access_token()
+	if text.has_key('access_token'):
+		access_token = text["access_token"]
+		session['access_token'] = access_token
+		remind_in = text['remind_in']
+		session['remind_in'] = remind_in
+		expires_in = text['expires_in']
+		session['expires_in'] = expires_in
+		uid = text['uid']
+		session['uid'] = uid
+	else:
+		return render_template('frontend/error.html')
+	return uid
+	return redirect(url_for(show))
 
 @frontend.route('/show')
 def show():
