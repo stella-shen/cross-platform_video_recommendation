@@ -1,0 +1,4 @@
+argparse==1.2.1
+ssh-import-id==3.21
+virtualenv==1.11.6
+wsgiref==0.1.2
