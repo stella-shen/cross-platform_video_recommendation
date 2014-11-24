@@ -7,7 +7,7 @@ frontend = Blueprint('frontend', __name__, template_folder = 'templates')
 
 APP_KEY = '2090411654'
 APP_SECRET = '64e9b96552114537fc51de682d479d95'
-CALLBACK_URL = 'http://bili.thumedia.org/callback'
+CALLBACK_URL = 'http://bili.thumedia.org:5000/callback'
 
 @frontend.route('/')
 def index():
@@ -19,18 +19,23 @@ def login():
 		return redirect(url_for('.callback'))
 	auth = sina.privateOAuth(APP_KEY, APP_SECRET, CALLBACK_URL)
 	authorize_url = auth.get_auth_url()
-	#print code
 	return redirect(authorize_url)
 	
 @frontend.route('/callback', methods = ['GET', 'POST'])
 def callback():
-	code = session['code']
+	code = request.args.get('code', 0)
+	session['code'] = code
 	accessOauth = sina.privateOAuth(APP_KEY, APP_SECRET, CALLBACK_URL, code)
 	access_token_url = accessOauth.get_access_token_url()
-	redirect(access_token_url)
 	access_token = request.args.get('access_token', 0)
 	session['access_token'] = access_token
-	return render_template('fronted/show.html')
+	#return str(access_token_url)
+	return redirect(access_token_url)
+
+@frontend.route('/access_token', methods = ['GET', 'POST'])
+def access_token():
+	#access_token = request.args.get('access_token')
+	return access_token
 
 @frontend.route('/show')
 def show():
