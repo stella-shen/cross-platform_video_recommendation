@@ -26,16 +26,13 @@ def callback():
 	code = request.args.get('code', 0)
 	session['code'] = code
 	accessOauth = sina.privateOAuth(APP_KEY, APP_SECRET, CALLBACK_URL, code)
-	access_token_url = accessOauth.get_access_token_url()
-	access_token = request.args.get('access_token', 0)
-	session['access_token'] = access_token
-	#return str(access_token_url)
-	return redirect(access_token_url)
-
-@frontend.route('/access_token', methods = ['GET', 'POST'])
-def access_token():
-	#access_token = request.args.get('access_token')
+	access_token = accessOauth.get_access_token()
 	return access_token
+
+@frontend.route('/access_token', methods = ['POST'])
+def access_token():
+
+	return request.data 
 
 @frontend.route('/show')
 def show():
