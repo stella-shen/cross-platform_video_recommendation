@@ -88,7 +88,7 @@ def callback():
 		comments_cnt = weibo['comments_count']
 		w_user = weibo['user']
 		w_uid = w_user['id']
-		current_weibo = Weibo.query.filter(id == w_id).first()
+		current_weibo = Weibo.query.filter(Weibo.id == w_id).first()
 		if current_weibo is None:
 			weibo = Weibo(id = w_id, uid = w_uid, access_token = access_token, count = 200, text = text, source = source, reposts_cnt = reposts_cnt, comments_cnt = comments_cnt)
 			db.session.add(weibo)
@@ -101,6 +101,6 @@ def callback():
 			current_weibo.reposts_cnt = reposts_cnt
 			current_weibo.comments_cnt = comments_cnt
 		db.session.commit()
-	return weibo_list
+	return repr(weibo_list)
 	return redirect(url_for(show))
 
