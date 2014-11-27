@@ -77,30 +77,30 @@ def callback():
 	count = 200
 	weibo_api = sina.privateAPI(access_token, uid, count)
 	weibo_json = json.loads(weibo_api.get_weibo_data())
-	weibo = weibo_json['statuses']
-	weibo = weibo[0]
-	return repr(weibo)
-	w_id = weibo['id']
-	text = weibo['text']
-	source = weibo['source']
-	reposts_cnt = weibo['reposts_count']
-	comments_cnt = weibo['comments_count']
-	w_user = weibo['user']
-	w_uid = w_user['id']
-	current_weibo = Weibo.query.filter(id == w_id).first()
-	if current_weibo is None:
-		weibo = Weibo(id = w_id, uid = w_uid, access_token = access_token, count = 200, text = text, source = source, reposts_cnt = reposts_cnt, comments_cnt = comments_cnt)
-		db.session.add(weibo)
-	else:
-		current_weibo.uid = uid
-		current_weibo.access_token = access_token
-		current_weibo.count = count
-		current_weibo.text = text
-		current_weibo.source = source
-		current_weibo.reposts_cnt = reposts_cnt
-		current_weibo.comments_cnt = comments_cnt
-	db.session.commit()
-	print repr(weibo)
-	return repr(users)
+	weibo_set = weibo_json['statuses']
+	weibo_list = []
+	for weibo in weibo_set:
+		w_id = weibo['id']
+		text = weibo['text']
+		weibo_list.append(text.encode("utf8"))
+		source = weibo['source']
+		reposts_cnt = weibo['reposts_count']
+		comments_cnt = weibo['comments_count']
+		w_user = weibo['user']
+		w_uid = w_user['id']
+		current_weibo = Weibo.query.filter(id == w_id).first()
+		if current_weibo is None:
+			weibo = Weibo(id = w_id, uid = w_uid, access_token = access_token, count = 200, text = text, source = source, reposts_cnt = reposts_cnt, comments_cnt = comments_cnt)
+			db.session.add(weibo)
+		else:
+			current_weibo.uid = uid
+			current_weibo.access_token = access_token
+			current_weibo.count = count
+			current_weibo.text = text
+			current_weibo.source = source
+			current_weibo.reposts_cnt = reposts_cnt
+			current_weibo.comments_cnt = comments_cnt
+		db.session.commit()
+	return repr(weibo_list)
 	return redirect(url_for(show))
 

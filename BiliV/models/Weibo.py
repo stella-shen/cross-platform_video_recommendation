@@ -11,7 +11,7 @@ class Weibo(db.Model):
 	uid = db.Column(db.Integer, db.ForeignKey('User.id'))
 	access_token = db.Column(db.Text)
 	count = db.Column(db.Integer)
-	created_at = db.Column(db.DateTime)
+	#created_at = db.Column(db.DateTime)
 	text = db.Column(db.Text)
 	source = db.Column(db.Text)
 	reposts_cnt = db.Column(db.Integer)
@@ -21,4 +21,4 @@ class Weibo(db.Model):
 		return self.id
 
 	def __repr__(self):
-		return "<%s>" % self
+		return "<Weibo %r>" % self.text

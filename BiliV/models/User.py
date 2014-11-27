@@ -20,7 +20,8 @@ class User(db.Model):
     followers_cnt = db.Column(db.Integer)
     friends_cnt = db.Column(db.Integer)
     statuses_cnt = db.Column(db.Integer)
-    update_time = db.Column(db.DateTime)
+    #update_time = db.Column(db.DateTime)
+    bi_followers_count = db.Column(db.Integer)
 
     def is_authenticated(self):
         return True
@@ -29,4 +30,4 @@ class User(db.Model):
     	return self.id
 
     def __repr__(self):
-    	return "<%s>" % self
+    	return "<User %r>" % self.screen_name
