@@ -1,4 +1,5 @@
 import requests
+import json
 
 class privateOAuth(object):
 
@@ -21,13 +22,14 @@ class privateOAuth(object):
 
 	def get_access_token(self):
 		postdata = {
-				'redirect_url' : self.call_back_url,
-				'client_id' : seld.app_key,
+				'redirect_uri' : self.call_back_url,
+				'client_id' : self.app_key,
 				'grant_type' : 'authorization_code',
 				'code' : self.code,
 				'client_secret' : self.app_secret
 				}
-		request_url = 'https://api.weibo.com/oauth2/access_token'
+		request_url = self.auth_host + self.auth_root + 'access_token'
 		r = requests.post(request_url, data=postdata)
-		return r.text
+		r = r.text.encode("utf8")
+		return r
 

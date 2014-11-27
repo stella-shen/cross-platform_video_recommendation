@@ -101,6 +101,6 @@ def callback():
 			current_weibo.reposts_cnt = reposts_cnt
 			current_weibo.comments_cnt = comments_cnt
 		db.session.commit()
-	return repr(weibo_list)
+	return weibo_list
 	return redirect(url_for(show))
 
