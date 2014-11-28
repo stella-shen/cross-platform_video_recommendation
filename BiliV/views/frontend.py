@@ -8,8 +8,8 @@ import json
 
 frontend = Blueprint('frontend', __name__, template_folder = 'templates')
 
-APP_KEY = '2090411654'
-APP_SECRET = '64e9b96552114537fc51de682d479d95'
+APP_KEY = '4159940778'
+APP_SECRET = '8ecb3fbdd7d22c38539041e0f459890b'
 CALLBACK_URL = 'http://bili.thumedia.org:5000/callback'
 
 @frontend.route('/')
@@ -42,6 +42,12 @@ def callback():
 		session['uid'] = uid
 	else:
 		return render_template('frontend/error.html')
+	weibo_list = get_current_user_data(access_token, uid)
+	#other_weibo_list = get_id_data(access_token, uid, 1690707634)
+	return weibo_list
+	return redirect(url_for(show))
+
+def get_current_user_data(access_token, uid):
 	#get user data
 	user_api = sina.privateAPI(access_token, uid)
 	data_json = json.loads(user_api.get_user_data())
@@ -56,8 +62,9 @@ def callback():
 	statuses_cnt = data_json['statuses_count']
 	#update_time = data_json['created_at']
 	bi_followers_count = data_json['bi_followers_count']
+	user_data_set = str(data_json)
 	if current_user is None:
-		user = User(id = uid, screen_name = screen_name, access_token = access_token, description = description, gender = gender, image_url = img_url, url = url, followers_cnt = followers_cnt, friends_cnt = friends_cnt, statuses_cnt = statuses_cnt, bi_followers_count = bi_followers_count)
+		user = User(id = uid, screen_name = screen_name, access_token = access_token, description = description, gender = gender, image_url = img_url, url = url, followers_cnt = followers_cnt, friends_cnt = friends_cnt, statuses_cnt = statuses_cnt, bi_followers_count = bi_followers_count, data_set = user_data_set)
 		db.session.add(user)
 	else:
 		current_user.screen_name = screen_name
@@ -70,12 +77,12 @@ def callback():
 		current_user.friends_cnt = friends_cnt
 		current_user.statuses_cnt = statuses_cnt
 		current_user.bi_followers_count = bi_followers_count
+		current_user.data_set = user_data_set
 	db.session.commit()
 	users = User.query.all()
 	print users
 	#get weibo data
-	count = 200
-	weibo_api = sina.privateAPI(access_token, uid, count)
+	weibo_api = sina.privateAPI(access_token, uid)
 	weibo_json = json.loads(weibo_api.get_weibo_data())
 	weibo_set = weibo_json['statuses']
 	weibo_list = []
@@ -86,21 +93,54 @@ def callback():
 		source = weibo['source']
 		reposts_cnt = weibo['reposts_count']
 		comments_cnt = weibo['comments_count']
-		w_user = weibo['user']
-		w_uid = w_user['id']
+		w_uid = uid
+		created_at = weibo['created_at']
+		weibo = str(weibo)
 		current_weibo = Weibo.query.filter(Weibo.id == w_id).first()
 		if current_weibo is None:
-			weibo = Weibo(id = w_id, uid = w_uid, access_token = access_token, count = 200, text = text, source = source, reposts_cnt = reposts_cnt, comments_cnt = comments_cnt)
+			weibo = Weibo(id = w_id, uid = w_uid, created_at = created_at, text = text, source = source, reposts_cnt = reposts_cnt, comments_cnt = comments_cnt, data_set = weibo)
 			db.session.add(weibo)
 		else:
 			current_weibo.uid = uid
-			current_weibo.access_token = access_token
-			current_weibo.count = count
+			current_weibo.created_at = created_at
 			current_weibo.text = text
 			current_weibo.source = source
 			current_weibo.reposts_cnt = reposts_cnt
 			current_weibo.comments_cnt = comments_cnt
+			current_weibo.data_set = weibo
 		db.session.commit()
-	return repr(weibo_list)
-	return redirect(url_for(show))
+		return repr(weibo_list)
+
+def get_id_data(access_token, uid, other_id):
+	#get weibo data
+	weibo_api = sina.privateAPI(access_token, uid)
+	weibo_json = json.loads(weibo_api.get_other_weibo_data(other_id))
+	return repr(weibo_json)
+	weibo_set = weibo_json['statuses']
+	weibo_list = []
+	for weibo in weibo_set:
+		w_id = weibo['id']
+		text = weibo['text']
+		weibo_list.append(text.encode("utf8"))
+		source = weibo['source']
+		reposts_cnt = weibo['reposts_count']
+		comments_cnt = weibo['comments_count']
+		w_uid = other_id
+		created_at = weibo['created_at']
+		weibo = str(weibo)
+		current_weibo = Weibo.query.filter(Weibo.id == w_id).first()
+		if current_weibo is None:
+			weibo = Weibo(id = w_id, uid = w_uid, created_at = created_at, text = text, source = source, reposts_cnt = reposts_cnt, comments_cnt = comments_cnt, data_set = weibo)
+			db.session.add(weibo)
+		else:
+			current_weibo.uid = uid
+			current_weibo.created_at = created_at
+			current_weibo.text = text
+			current_weibo.source = source
+			current_weibo.reposts_cnt = reposts_cnt
+			current_weibo.comments_cnt = comments_cnt
+			current_weibo.data_set = weibo
+		db.session.commit()
+		return repr(weibo_list)
+
 
