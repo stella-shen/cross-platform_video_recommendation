@@ -20,8 +20,8 @@ class User(db.Model):
     followers_cnt = db.Column(db.Integer)
     friends_cnt = db.Column(db.Integer)
     statuses_cnt = db.Column(db.Integer)
-    #update_time = db.Column(db.DateTime)
     bi_followers_count = db.Column(db.Integer)
+    data_set = db.Column(db.Text)
 
     def is_authenticated(self):
         return True

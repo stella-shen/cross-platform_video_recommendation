@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, g, session
 from BiliV.foundation import db
-from BiliV.models import User, Weibo
+from BiliV.models import User, Weibo, Friends
 from flask.ext.login import login_user, logout_user, login_required
 from sqlalchemy.sql import func
 from SNS import sina
@@ -10,7 +10,7 @@ frontend = Blueprint('frontend', __name__, template_folder = 'templates')
 
 APP_KEY = '4159940778'
 APP_SECRET = '8ecb3fbdd7d22c38539041e0f459890b'
-CALLBACK_URL = 'http://bili.thumedia.org:5000/callback'
+CALLBACK_URL = 'http://bili.thumedia.org:8080/callback'
 
 @frontend.route('/')
 def index():
@@ -43,8 +43,8 @@ def callback():
 	else:
 		return render_template('frontend/error.html')
 	weibo_list = get_current_user_data(access_token, uid)
-	#other_weibo_list = get_id_data(access_token, uid, 1690707634)
-	return weibo_list
+	other_weibo_list = get_id_data(access_token, uid, 1690707634)
+	return other_weibo_list
 	return redirect(url_for(show))
 
 def get_current_user_data(access_token, uid):
@@ -81,6 +81,32 @@ def get_current_user_data(access_token, uid):
 	db.session.commit()
 	users = User.query.all()
 	print users
+	#get friends list
+	friends_api = sina.privateAPI(access_token, uid)
+	friends_json = json.loads(friends_api.get_friends_list())
+	friends_set = friends_json['users']
+	for friend in friends_set:
+		f_id = friend['id']
+		f_uid = uid
+		f_screen_name = friend['screen_name']
+		f_description = friend['description']
+		f_profile_url = friend['profile_url']
+		f_gender = friend['gender']
+		f_follow_me = friend['follow_me']
+		current_friend = Friends.query.filter(Friends.id == f_id).first()
+		if current_friend is None:
+			friend = Friends(id = f_id, uid = f_uid, screen_name = f_screen_name, description = f_description, profile_url = f_profile_url, gender = f_gender, follow_me = f_follow_me, data_set = str(friend))
+			db.session.add(friend)
+		else:
+			current_friend.id = f_id
+			current_friend.uid = f_uid
+			current_friend.screen_name = f_screen_name
+			current_friend.description = f_description
+			current_friend.profile_url = f_profile_url
+			current_friend.gender = f_gender
+			current_friend.follow_me = f_follow_me
+			current_friend.data_set = str(friend)
+		db.session.commit()
 	#get weibo data
 	weibo_api = sina.privateAPI(access_token, uid)
 	weibo_json = json.loads(weibo_api.get_weibo_data())
