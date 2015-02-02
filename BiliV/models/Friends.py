@@ -1,18 +1,15 @@
-from flask import current_app
-
 from BiliV.foundation import db
-from BiliV.models import User
 
 class Friends(db.Model):
-	__tablename__ = 'Friends'
+	__tablename__ = 'friends'
 	id = db.Column(db.Integer, primary_key = True)
-	uid = db.Column(db.Integer, db.ForeignKey('User.id'))
-	screen_name = db.Column(db.Text)
-	description = db.Column(db.Text)
-	profile_url = db.Column(db.Text)
-	gender = db.Column(db.String(1))
+	uid = db.Column(db.Integer, db.ForeignKey('user.id'))
+	screen_name = db.Column(db.String(50))
+	description = db.Column(db.String(100))
+	profile_url = db.Column(db.String(100))
+	gender = db.Column(db.Integer)
 	follow_me = db.Column(db.Boolean)
-	data_set = db.Column(db.Text)
+	data_set = db.Column(db.Text)    #all weibo API data
 
 	def __repr__(self):
 		return "<Friends: %r>" % self.screen_name

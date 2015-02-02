@@ -1,27 +1,23 @@
-from datetime import datetime
-
 from flask import current_app
-
-#from flask.ext.sqlalchemy import BaseQuery
-#from flask.ext.principal import RoleNeed, UserNeed, Permission
-
+from BiliV import const
 from BiliV.foundation import db
-#from BiliV.permissions import admin_permission, auth_permission
 
 class User(db.Model):
-    __tablename__ = 'User'
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key = True)
-    access_token = db.Column(db.Text)
-    screen_name = db.Column(db.Text)
-    description = db.Column(db.Text)
-    gender = db.Column(db.String(1), default = 'n')
-    image_url = db.Column(db.Text)
-    url = db.Column(db.Text)
+    access_token = db.Column(db.String(100))
+    screen_name = db.Column(db.String(50))
+    description = db.Column(db.String(100))
+    gender = db.Column(db.Integer)
+    image_url = db.Column(db.String(100))
+    url = db.Column(db.String(100))
     followers_cnt = db.Column(db.Integer)
     friends_cnt = db.Column(db.Integer)
     statuses_cnt = db.Column(db.Integer)
     bi_followers_count = db.Column(db.Integer)
-    data_set = db.Column(db.Text)
+    data_set = db.Column(db.Text)    #all weibo json data
+    weibo = db.relationship('Weibo', backref = 'user', lazy = 'dynamic')
+    friends = db.relationship('Friends', backref = 'user', lazy = 'dynamic')
 
     def is_authenticated(self):
         return True

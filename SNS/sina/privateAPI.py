@@ -14,13 +14,8 @@ class privateAPI(object):
 		r = requests.get(data_url)
 		return r.text
 
-	def get_weibo_data(self):
-		data_url = self.api_host + self.api_root + 'statuses/user_timeline.json?access_token=' + self.access_token
-		r = requests.get(data_url)
-		return r.text
-
-	def get_other_weibo_data(self, other_uid):
-		data_url = self.api_host + self.api_root + 'statuses/user_timeline.json?access_token=' + self.access_token + '&uid=' + str(other_uid)
+	def get_weibo_data(self, id):
+		data_url = self.api_host + self.api_root + 'statuses/user_timeline.json?access_token=' + self.access_token + '&uid=' + str(id)
 		r = requests.get(data_url)
 		return r.text
 
