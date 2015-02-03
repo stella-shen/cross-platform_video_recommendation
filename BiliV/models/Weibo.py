@@ -6,6 +6,7 @@ class Weibo(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	uid = db.Column(db.Integer, db.ForeignKey('user.id'))
 	created_at = db.Column(db.DateTime)
+	utc = db.Column(db.String(10))
 	text = db.Column(db.String(300))
 	source = db.Column(db.String(200))
 	reposts_cnt = db.Column(db.Integer)

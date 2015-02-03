@@ -21,9 +21,9 @@ class User(db.Model):
 
     def is_authenticated(self):
         return True
-
+	
     def __str__(self):
-    	return self.id
+        return self.id
 
     def __repr__(self):
-    	return "<User %r>" % self.screen_name
+        return "<User %r>" % self.screen_name
