@@ -17,8 +17,16 @@ def login():
 	auth = sina.privateOAuth(APP_KEY, APP_SECRET, CALLBACK_URL)
 	authorize_url = auth.get_auth_url()
 	return redirect(authorize_url)
-	
+
+@frontend.route('/logout')
+@login_required
+def logout():
+	logout_user()
+	return redirect(url_for('.index'))
+
+
 @frontend.route('/callback', methods = ['GET', 'POST'])
+@login_required
 def callback():
 	code = request.args.get('code', 0)
 	accessOauth = sina.privateOAuth(APP_KEY, APP_SECRET, CALLBACK_URL, code)
