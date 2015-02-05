@@ -1,7 +1,5 @@
-from flask import Flask, g, session, request, flash, redirect, json, url_for, render_template
-
+from flask import Flask, g, session, redirect, json, url_for, render_template
 from flask.ext.login import current_user
-
 from BiliV import views
 from BiliV.foundation import db, login_manager
 from BiliV.models import User, Weibo
@@ -9,8 +7,7 @@ from BiliV.models import User, Weibo
 DEFAULT_APP_NAME = 'BiliV'
 
 DEFAULT_MODULES = [
-	views.frontend, 
-	#views.auth,
+	views.frontend
 ]
 
 def create_app():
@@ -29,7 +26,7 @@ def configure_foundations(app):
 		db.session.close()
 		return response
 	login_manager.init_app(app)
-	login_manager.login_view = 'auth'
+	login_manager.login_view = 'frontend.login'
 	@login_manager.user_loader
 	def load_user(id):
 		try:
@@ -40,7 +37,7 @@ def configure_foundations(app):
 	def before_request():
 		g.user = current_user
 		print g.user
-		if g.user != None and g.user.is_authenticated():
+		if g.user is not None and g.user.is_authenticated():
 			g.user.update_time = datetime.utcnow()
 			db.session.add(g.user)
 			db.session.commit()

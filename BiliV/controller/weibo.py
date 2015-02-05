@@ -2,6 +2,7 @@ from SNS import sina
 from BiliV.foundation import db
 from BiliV.models import Weibo
 from BiliV.controller import basic
+import json
 
 def get_weibo_data(access_token, uid, id):
 	weibo_api = sina.privateAPI(access_token, uid)
@@ -15,14 +16,14 @@ def get_weibo_data(access_token, uid, id):
 			current_weibo = Weibo(id = w_id)
 			db.session.add(current_weibo)
 		current_weibo.text = weibo['text']
-		current_weibo.timestr = weibo['created_at']
+		timestr = weibo['created_at']
 		timeinfo = basic.analyze_timestr(timestr)
 		current_weibo.created_at = timeinfo['time']
 		current_weibo.utc = timeinfo['utc']
-		current_weibo.source = wiebo['source']
+		current_weibo.source = weibo['source']
 		current_weibo.reposts_cnt = weibo['reposts_count']
 		current_weibo.comments_cnt = weibo['comments_count']
 		current_weibo.uid = uid
-		current_weibo.data_set = weibo
+		current_weibo.data_set = str(weibo)
 		db.session.commit()
 

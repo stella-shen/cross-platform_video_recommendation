@@ -1,6 +1,8 @@
 from SNS import sina
 from BiliV.foundation import db
 from BiliV.models import Friends
+from BiliV.controller import basic
+import json
 
 def get_friends_data(access_token, uid):
 	friends_api = sina.privateAPI(access_token, uid)
@@ -16,9 +18,9 @@ def get_friends_data(access_token, uid):
 		current_friend.screen_name = friend['screen_name']
 		current_friend.description = friend['description']
 		current_friend.profile_url = friend['profile_url']
-		current_friend.gender = friend['gender']
+		current_friend.gender = basic.analyze_gender(friend['gender'])
 		current_friend.follow_me = friend['follow_me']
-		current_friend.data_set = friend
+		current_friend.data_set = str(friend)
 		db.session.commit()
 
 
