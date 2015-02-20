@@ -9,7 +9,6 @@ __version__ = '1.0'
 __author__ = 'UGeeker'
 __license__ = 'MIT'
 
-from .error import WeibopError
-from .privateOAuth import WeiboAPI
-from .privateAPI import privateAPI
+from .privateOAuth import WeiboOAuth
+from .privateAPI import WeiboAPI
 

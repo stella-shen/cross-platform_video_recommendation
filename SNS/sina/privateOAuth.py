@@ -2,12 +2,9 @@ import requests
 import urllib
 import error
 
-class WeiboAPI(object):
-	"Do not support saving access_token, because we don't need at this level"
-
+class WeiboOAuth(object):
 	host = 'https://api.weibo.com'
 	auth_root = '/oauth2'
-	api_root = '/2'
 
 	def __init__(self, app_key, app_secret):
 		self.app_key = app_key
@@ -37,7 +34,7 @@ class WeiboAPI(object):
 			'client_id' : self.app_key,
 			'grant_type' : 'authorization_code',
 			'code' : code,
-			'redirect_uri' : self.call_back_url,
+			'redirect_uri' : callback_url,
 		}
 		return self._get_token(postdata)
 
@@ -61,7 +58,7 @@ class WeiboAPI(object):
 		if 'code' in ret:
 			# exchange fail!
 			raise error.WeiboAuthError(ret['msg'])
-		flags = map(lambda key: key in ret, ['access_token', 'expires_in', 'refresh_token'])
+		flags = map(lambda key: key in ret, ['access_token', 'expires_in'])
 		if not all(flags):
 			raise error.WeiboAuthError('Got unexpect result')
 

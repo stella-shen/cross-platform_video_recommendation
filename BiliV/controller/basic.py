@@ -11,10 +11,8 @@ def analyze_timestr(timestr):
 	return {'time' : date, 'utc' : utc}
 
 def analyze_gender(gender):
-	if gender == 'm':
-		return const.GENDER_MALE
-	elif gender == 'f':
-		return const.GENDER_FEMALE
-	else:
-		return const.GENDER_NONE
-
+	m = {
+		"m": const.GENDER_MALE,
+		"f": const.GENDER_FEMALE,
+	}
+	return m.get(gender, const.GENDER_NONE)
