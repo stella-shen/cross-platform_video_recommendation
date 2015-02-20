@@ -1,35 +1,68 @@
 import requests
-import json
+import urllib
+import error
 
-class privateOAuth(object):
+class WeiboAPI(object):
+	"Do not support saving access_token, because we don't need at this level"
 
-	auth_host = 'https://api.weibo.com'
-	auth_root = '/oauth2/'
+	host = 'https://api.weibo.com'
+	auth_root = '/oauth2'
+	api_root = '/2'
 
-	def __init__(self, app_key, app_secret, call_back_url, code = None):
+	def __init__(self, app_key, app_secret):
 		self.app_key = app_key
 		self.app_secret = app_secret
-		self.call_back_url = call_back_url
-		self.code = code
 
-	def get_auth_url(self):
-		auth_url = self.auth_host + self.auth_root + 'authorize?client_id=' + self.app_key + '&response_type=code&redirect_uri=' + str(self.call_back_url)
+	def build_auth_url(self, interface, get_params = None):
+		"get_params: dict contain key value pair"
+		url = "%s%s/%s" % (self.host, self.auth_root, interface)
+		if get_params:
+			# ignore when no paramas or params is empty dictionary
+			suffix = urllib.urlencode(get_params)
+			url = ''.join([url, '?', suffix])
+		return url
+
+	def get_auth_url(self, callback_url):
+		data = {
+			"response_type": "code",
+			"redirect_uri": callback_url,
+			"client_id": self.app_key,
+		}
+		auth_url = self.build_auth_url('authorize', data)
 		return auth_url
 
-	def get_access_token_url(self):
-		access_url = self.auth_host + self.auth_root + 'access_token?client_id=' + self.app_key + '&client_secret=' + self.app_secret + '&grant_type=authorization_code&redirect_uri=' + self.call_back_url + '&code=' + self.code
-		return access_url
-
-	def get_access_token(self):
+	def exchange_access_token(self, callback_url, code):
 		postdata = {
-				'redirect_uri' : self.call_back_url,
-				'client_id' : self.app_key,
-				'grant_type' : 'authorization_code',
-				'code' : self.code,
-				'client_secret' : self.app_secret
-				}
-		request_url = self.auth_host + self.auth_root + 'access_token'
-		r = requests.post(request_url, data=postdata)
-		r = r.text.encode("utf8")
-		return r
+			'client_secret' : self.app_secret,
+			'client_id' : self.app_key,
+			'grant_type' : 'authorization_code',
+			'code' : code,
+			'redirect_uri' : self.call_back_url,
+		}
+		return self._get_token(postdata)
 
+	def refresh_access_token(self, refresh_token):
+		postdata = {
+			'client_secret' : self.app_secret,
+			'client_id' : self.app_key,
+			'grant_type' : 'refresh_token',
+			'refresh_token' : refresh_token,
+		}
+		return self._get_token(postdata)
+
+	def _get_token(self, data):
+		url = self.build_auth_url('access_token')
+
+		# check for validation
+		r = requests.post(url, data=data)
+		r.raise_for_status()
+
+		ret = r.json()
+		if 'code' in ret:
+			# exchange fail!
+			raise error.WeiboAuthError(ret['msg'])
+		flags = map(lambda key: key in ret, ['access_token', 'expires_in', 'refresh_token'])
+		if not all(flags):
+			raise error.WeiboAuthError('Got unexpect result')
+
+		return ret

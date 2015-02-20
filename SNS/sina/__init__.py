@@ -5,11 +5,11 @@
 """
 weibo API library
 """
-__version__ = '1.5'
-__author__ = 'Joshua Roesslein'
+__version__ = '1.0'
+__author__ = 'UGeeker'
 __license__ = 'MIT'
 
 from .error import WeibopError
-from .privateOAuth import privateOAuth
+from .privateOAuth import WeiboAPI
 from .privateAPI import privateAPI
 

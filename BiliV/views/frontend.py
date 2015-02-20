@@ -16,8 +16,8 @@ def index():
 def login():
 	if g.user is not None and g.user.is_authenticated():
 		return redirect(url_for('.index'))
-	auth = sina.privateOAuth(const.APP_KEY, const.APP_SECRET, const.CALLBACK_URL)
-	authorize_url = auth.get_auth_url()
+	auth = sina.WeiboAPI(const.APP_KEY, const.APP_SECRET)
+	authorize_url = auth.get_auth_url(const.CALLBACK_URL)
 	return redirect(authorize_url)
 
 @frontend.route('/logout')
@@ -28,18 +28,20 @@ def logout():
 
 @frontend.route('/callback', methods = ['GET', 'POST'])
 def callback():
-	code = request.args.get('code', 0)
-	accessOauth = sina.privateOAuth(const.APP_KEY, const.APP_SECRET, const.CALLBACK_URL, code)
-	text_json = accessOauth.get_access_token()
-	text = json.loads(text_json)
-	if text.has_key('access_token'):
-		access_token = text["access_token"]
-		uid = int(text['uid'])
-		user.get_user_data(access_token, uid)
-		friends.get_friends_data(access_token, uid)
-		weibo.get_weibo_data(access_token, uid, uid)
+	try:
+		code = request.args['code']
+		api = sina.WeiboAPI(const.APP_KEY, const.APP_SECRET)
+
+		tokens = api.exchange_access_token(const.CALLBACK_URL, code)
+
+		# access_token are ensured in tokens
+		access_token = tokens["access_token"]
+		#uid = int(text['uid'])
+		#user.get_user_data(access_token, uid)
+		#friends.get_friends_data(access_token, uid)
+		#weibo.get_weibo_data(access_token, uid, uid)
 		#weibo.get_weibo_data(access_token, uid, 1690707634)
-	else:
+		return access_token
+	except:
 		return render_template('frontend/error.html')
-	return access_token
 
