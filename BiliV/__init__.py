@@ -4,14 +4,12 @@ from BiliV import views
 from BiliV.foundation import db, login_manager
 from BiliV.models import User, Weibo
 
-DEFAULT_APP_NAME = 'BiliV'
-
 DEFAULT_MODULES = [
 	views.frontend
 ]
 
 def create_app():
-	app = Flask(DEFAULT_APP_NAME)
+	app = Flask(__name__)
 	app.config.from_object('config')
 	configure_foundations(app)
 	configure_blueprint(app, DEFAULT_MODULES)
@@ -27,6 +25,7 @@ def configure_foundations(app):
 		return response
 	login_manager.init_app(app)
 	login_manager.login_view = 'frontend.login'
+	login_manager.login_message_category = "info"
 	@login_manager.user_loader
 	def load_user(id):
 		try:
@@ -36,11 +35,7 @@ def configure_foundations(app):
 	@app.before_request
 	def before_request():
 		g.user = current_user
-		print g.user
-		if g.user is not None and g.user.is_authenticated():
-			g.user.update_time = datetime.utcnow()
-			db.session.add(g.user)
-			db.session.commit()
+		return
 
 def configure_blueprint(app, modules):
 	for module in modules:

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html{% block html_attribs %} lang="zh-CN"{% endblock html_attribs %}>
+  {%- block html %}
+  <head>
+    {%- block head %}
+    <meta charset="utf-8">
+    <title>
+      {% block title %}
+      {{title}}
+      {% endblock title %}
+    </title>
+    {%- block meta %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {%- endblock meta %}
+    <script src="{{url_for('static', filename='js/jquery-2.1.3.min.js')}}"></script>
+    {%- block style %}
+    <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
+    <!--
+    <link href="{{url_for('static', filename='css/font-awesome.min.css')}}" rel="stylesheet">
+    -->
+    {%- block style_navbar_padding %}
+    {%- endblock style_navbar_padding %}
+    {%- endblock style %}
+
+    {%- block favicons %}
+    {%- endblock favicons %}
+    {%- endblock head %}
+  </head>
+  <body>
+    {%- block body %}
+    {%- block body_content %}
+    {%- endblock body_content %}
+    {%- block bootstrap_js_bottom %}
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    {%- endblock bootstrap_js_bottom %}
+    {%- endblock body %}
+  </body>
+  <!-- Font Awesome is licensed CC-BY-3.0: http://fortawesome.github.com/Font-Awesome -->
+  {%- endblock html %}
+</html>

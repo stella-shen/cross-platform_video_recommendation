@@ -1,0 +1,60 @@
+{% extends "bootstrap_base.html" %}
+
+{%- block style_navbar_padding %}
+<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+{%- endblock style_navbar_padding %}
+
+{% block body_content %}
+<nav class="header navbar navbar-default navbar-fixed-top g-header" role="navigation">
+<div class="container">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" id="header-logo" href="#"></a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav navbar-right">
+      {% if g.user and g.user.is_authenticated() %}
+      <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <img id="user-avatar" src="{{g.user.image_url}}">
+        <span class="name"> {{g.user.screen_name}} </span><span class="caret"></span></a>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="user.html">我的主页</a></li>
+        <li class="divider"></li>
+        <li><a href="{{url_for('.logout')}}">退出</a></li>
+        {% endif %}
+      </ul>
+      </li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</div><!-- /.container-fluid -->
+</nav>
+
+<div id="header-spacer"> </div>
+
+{% with messages = get_flashed_messages(with_categories=True) %}
+{% if messages %}
+<div class="container">
+  <div id="alert">
+    {% for category, message in messages %}
+    <div class="alert alert-{{category|default('info')}}">
+      {{ message }}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+{% endwith %}
+
+<div class="container">
+  {% block content %}{% endblock %}
+</div>
+{% endblock %}

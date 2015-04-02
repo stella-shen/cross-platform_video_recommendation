@@ -4,28 +4,28 @@ from BiliV.models.User import User
 from flask.ext.login import login_user, logout_user, login_required
 from BiliV import const
 from SNS import sina
-import json
 import arrow
 
 frontend = Blueprint('frontend', __name__, template_folder = 'templates')
 
 @frontend.route('/')
+@login_required
 def index():
 	return render_template('frontend/index.html')
 
-@frontend.route('/login', methods = ['GET', 'POST'])
+@frontend.route('/login',)
 def login():
 	if g.user is not None and g.user.is_authenticated():
 		return redirect(url_for('.index'))
 	auth = sina.WeiboOAuth(const.APP_KEY, const.APP_SECRET)
 	authorize_url = auth.get_auth_url(const.CALLBACK_URL)
-	return redirect(authorize_url)
+	return render_template('frontend/login.html', authorize_url = authorize_url)
 
 @frontend.route('/logout')
 @login_required
 def logout():
 	logout_user()
-	return redirect(url_for('.index'))
+	return redirect(url_for('.login'))
 
 @frontend.route('/callback', methods = ['GET', 'POST'])
 def callback():
@@ -52,11 +52,13 @@ def callback():
 			user.update()
 		db.session.commit()
 
+		login_user(user)
 		#friends.get_friends_data(access_token, uid)
 		#weibo.get_weibo_data(access_token, uid, uid)
 		#weibo.get_weibo_data(access_token, uid, 1690707634)
 		return redirect(url_for('.index'))
 	except:
+		raise
 		db.session.rollback()
 		return render_template('frontend/error.html')
 

@@ -2,6 +2,7 @@ from BiliV import const
 from BiliV.foundation import db
 from sqlalchemy_utils import ArrowType, JSONType
 from SNS import sina
+from flask.ext.login import UserMixin
 import arrow
 
 def analyze_gender(gender):
@@ -11,7 +12,7 @@ def analyze_gender(gender):
 	}
 	return m.get(gender, const.GENDER_NONE)
 
-class User(db.Model):
+class User(db.Model, UserMixin):
 	__tablename__ = 'user'
 	id = db.Column(db.Integer, primary_key = True)
 
@@ -32,12 +33,6 @@ class User(db.Model):
 	detail = db.Column(JSONType)    #all weibo json data
 	weibo = db.relationship('Weibo', backref = 'user', lazy = 'dynamic')
 	friends = db.relationship('Friends', backref = 'user', lazy = 'dynamic')
-
-	def is_authenticated(self):
-		return True
-
-	def __str__(self):
-		return self.id
 
 	def __repr__(self):
 		return "<User %r>" % self.screen_name

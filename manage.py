@@ -7,7 +7,7 @@ app_ = create_app()
 app_.debug = True
 manager = Manager(app_)
 
-manager.add_command("runserver", Server('0.0.0.0', port = 8080))
+manager.add_command("runserver", Server('0.0.0.0', port = 8081))
 
 def _make_context():
 	return dict(db = db)
