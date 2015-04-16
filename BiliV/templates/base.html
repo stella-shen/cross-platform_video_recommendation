@@ -1,7 +1,8 @@
 {% extends "bootstrap_base.html" %}
 
 {%- block style_navbar_padding %}
-<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='css/reset.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='css/waterfall.css')}}">
 {%- endblock style_navbar_padding %}
 
 {% block body_content %}
@@ -15,26 +16,26 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" id="header-logo" href="#"></a>
+    <a class="header-logo" href="#"></a>
   </div>
 
   <!-- Collect the nav links, forms, and other content for toggling -->
+  {% if g.user and g.user.is_authenticated() %}
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav navbar-right">
-      {% if g.user and g.user.is_authenticated() %}
       <li class="dropdown">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         <img id="user-avatar" src="{{g.user.image_url}}">
         <span class="name"> {{g.user.screen_name}} </span><span class="caret"></span></a>
       <ul class="dropdown-menu" role="menu">
-        <li><a href="user.html">我的主页</a></li>
-        <li class="divider"></li>
-        <li><a href="{{url_for('.logout')}}">退出</a></li>
-        {% endif %}
+		  <li><a href="{{url_for('.account')}}">我的主页</a></li>
+          <li class="divider"></li>
+		  <li><a href="{{url_for('.logout')}}">退出</a></li>
       </ul>
-      </li>
+	  </li>
     </ul>
   </div><!-- /.navbar-collapse -->
+  {% endif %}
 </div><!-- /.container-fluid -->
 </nav>
 
@@ -58,3 +59,8 @@
   {% block content %}{% endblock %}
 </div>
 {% endblock %}
+<script src="js/libs/jquery/jquery.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/libs/handlebars/handlebars.js"></script>
+<script src="js/waterfall.min.js"></script>
+

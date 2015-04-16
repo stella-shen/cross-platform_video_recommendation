@@ -1,8 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
-<a href="{{authorize_url}}" class="center-block" id="login-btn">
-  <img src = "../static/img/signin.png">
-</a>
+<link href="{{url_for('static', filename='css/login.css')}}" rel="stylesheet">
+<div class="container">
+        <div class="headline">
+        <div class="logo"></div>
+        <div class="loginbtn">
+			<a href={{authorize_url}} class="btn btn-primary btn-weibo">
+      <span>
+        <i class="fa fa-weibo fa-lg"></i>使用微博登陆
+      </span>
+       </a>
+        </div>
+       </div>
+    </div>
 {% endblock %}
 
 {% block title %}

@@ -53,12 +53,18 @@ def callback():
 		db.session.commit()
 
 		login_user(user)
-		#friends.get_friends_data(access_token, uid)
-		#weibo.get_weibo_data(access_token, uid, uid)
-		#weibo.get_weibo_data(access_token, uid, 1690707634)
 		return redirect(url_for('.index'))
 	except:
 		raise
 		db.session.rollback()
 		return render_template('frontend/error.html')
 
+@frontend.route('/account')
+@login_required
+def account():
+	return render_template('frontend/user.html')
+
+@frontend.route('/recommend')
+@login_required
+def recommend():
+	return render_template('frontend/play.html')
