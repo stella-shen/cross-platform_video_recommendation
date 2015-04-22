@@ -72,5 +72,10 @@ def account():
 
 @frontend.route('/play', methods = ['GET', 'POST'])
 @login_required
-def recommend():
-	return render_template('frontend/play.html')
+def play():
+	aid = request.args.get('aid')
+	play_video = Video.query.filter_by(id = aid).first()
+	if play_video is None:
+		return render_template('frontend/error.html')
+	recommend_videos = video.get_video_data(7, 5, const.ALL)
+	return render_template('frontend/play.html', video = play_video, recommend_videos=recommend_videos)

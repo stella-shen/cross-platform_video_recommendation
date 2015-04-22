@@ -2,14 +2,18 @@
 {% block content %}
 <div class="main">
   <div class="primary">
-    <div class="video-container">
-       <embed width="650" height="390"quality="high" allowfullscreen="true" type="application/x-shockwave-flash" src="http://share.acg.tv/flash.swf" flashvars="aid=1790624&page=1" pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash"></embed>
-    </div>
+	  <div class="video-container">
+	  {% if video %}
+	  <embed width="650" height="390"quality="high" allowfullscreen="true" type="application/x-shockwave-flash" src="http://share.acg.tv/flash.swf" flashvars="aid={{video.id}}&page=1" pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash"></embed>
+	  {% endif %}
+   </div>
+   {% if video %}
     <div id="video-header">
       <div class="headline">
-        <a href="http://www.bilibili.com/video/av1790624/"><h4>如何摧毁一个超级大国</h4></a>
+		  <a href="{{video.url}}"><h4>{{video.title}}</h4></a>
       </div>
-    </div>
+  </div>
+  {% endif %}
     <div id="operation" class="clearfix">
       <div id="operation-left">
         <a href="#" class="btn btn-primary btn-weibo">
@@ -29,37 +33,17 @@
   </div>
   <div id="secondary">
    <div class="sidebar">
-    <ul>
+	<ul>
+	{% if recommend_videos %}
+	{% for video in recommend_videos %}
       <li class="video-list-item">
-        <a href="http://www.bilibili.com/video/av1804134/">
-            <span class="thumb"><img src="{{url_for('static', filename='img/thumb1.jpg')}}"></span>
-            <span class="title">【科普】献给好奇心旺盛者的找资源教程(MAD教程第0期)</span>
-            <span class="info">2001910次播放</span>
-        </a></li>
-         <li class="video-list-item">
-        <a href="http://www.bilibili.com/video/av1804134/">
-            <span class="thumb"><img src="{{url_for('static', filename='img/thumb1.jpg')}}"></span>
-            <span class="title">【科普】献给好奇心旺盛者的找资源教程(MAD教程第0期)</span>
-            <span class="info">2001910次播放</span>
-        </a></li>
-         <li class="video-list-item">
-        <a href="http://www.bilibili.com/video/av1804134/">
-            <span class="thumb"><img src="{{url_for('static', filename='img/thumb1.jpg')}}"></span>
-            <span class="title">【科普】献给好奇心旺盛者的找资源教程(MAD教程第0期)</span>
-            <span class="info">2001910次播放</span>
-        </a></li>
-          <li class="video-list-item">
-        <a href="http://www.bilibili.com/video/av1804134/">
-            <span class="thumb"><img src="{{url_for('static', filename='img/thumb1.jpg')}}"></span>
-            <span class="title">【科普】献给好奇心旺盛者的找资源教程(MAD教程第0期)</span>
-            <span class="info">2001910次播放</span>
-        </a></li>
-          <li class="video-list-item">
-        <a href="http://www.bilibili.com/video/av1804134/">
-            <span class="thumb"><img src="{{url_for('static', filename='img/thumb1.jpg')}}"></span>
-            <span class="title">【科普】献给好奇心旺盛者的找资源教程(MAD教程第0期)</span>
-            <span class="info">2001910次播放</span>
-        </a></li>
+	  <a href="{{url_for('.play', aid=video.id)}}">
+            <span class="thumb"><img src="{{video.pic}}"></span>
+			<span class="title">{{video.title}}</span>
+			<span class="info">{{video.pts}}次播放</span>
+		</a></li>
+	{% endfor %}
+	{% endif %}
     </ul>
     </div>
   </div>

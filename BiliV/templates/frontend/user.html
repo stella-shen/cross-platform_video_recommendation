@@ -18,13 +18,13 @@
 	{% for like in likes %}
     <div class="item-wrap">
       <div class="item">
-		  <a href="{{like.url}}">
+		  <a href="{{url_for('.play', aid=like.id)}}">
 			  <img src="{{like.pic}}" width="320" height="180" />
 		  </a>
         <div class="mask"></div>
 	  </div>
 	  <div class="item-info">
-		  <a href="{{like.url}}">
+		  <a href="{{url_for('play', aid=like.id)}}">
 			<p>{{like.title}}</p>
 		  </a>
 	  </div>
