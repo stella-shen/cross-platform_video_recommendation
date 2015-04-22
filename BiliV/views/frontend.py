@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, redirect, request, url_for, g
 from BiliV.foundation import db
 from BiliV.models.User import User
+from BiliV.models.Video import Video
+from BiliV.controller import video
 from flask.ext.login import login_user, logout_user, login_required
 from BiliV import const
 from SNS import sina
@@ -11,7 +13,10 @@ frontend = Blueprint('frontend', __name__, template_folder = 'templates')
 @frontend.route('/')
 @login_required
 def index():
-	return render_template('frontend/index.html')
+	all_videos = video.get_video_data(3, 4, const.ALL)
+	comic_videos = video.get_video_data(3, 4, const.COMIC)
+	series_videos = video.get_video_data(3, 4, const.SERIES)
+	return render_template('frontend/index.html', all_videos = all_videos, comic_videos = comic_videos, series_videos = series_videos)
 
 @frontend.route('/login',)
 def login():
@@ -62,9 +67,10 @@ def callback():
 @frontend.route('/account')
 @login_required
 def account():
-	return render_template('frontend/user.html')
+	likes = video.get_video_data(1, 9, const.ALL)
+	return render_template('frontend/user.html', likes = likes)
 
-@frontend.route('/recommend')
+@frontend.route('/play', methods = ['GET', 'POST'])
 @login_required
 def recommend():
 	return render_template('frontend/play.html')

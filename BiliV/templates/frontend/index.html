@@ -1,83 +1,62 @@
 {% extends "base.html" %}
 {% block content %}
-<div id="container"></div>
-<script type="text/x-handlebars-template" id="waterfall-tpl">
-{{#result}}
-<div class="box">
-    <div class="item">
-         <a href="play.html">
-        <img src="{{image}}" width="{{width}}" height="{{height}}" />
-       </a>
-       <div class="mask"></div>
-    </div>
-    <div class="item-info">
-    <p>【10月】Fate/stay night -UBW- 06</p>
-    </div>
-    <div class="item-reason">
-     <h6>推荐原因</h6> 
-     <p>因为你喜欢萌属性</p>
-     <p>你喜欢看《我是双马尾》</p>
-    </div>
-    <div class="item-liker">
-       <span>谁还喜欢这个视频</span>
-       <a href="#"><img src="img/user1.png"></a>
-       <a href="#"><img src="img/user2.png"></a>
-       <a href="#"><img src="img/user1.png"></a>
-       <a href="#"><img src="img/user2.png"></a>
-    </div>
-</div>
-{{/result}}
-</script>
+
 <script src="js/libs/jquery/jquery.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/libs/handlebars/handlebars.js"></script>
 <script src="js/waterfall.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script>
-$('#container').waterfall({
-    itemCls: 'box',
-    colWidth: 320,  
-    gutterWidth: 70,
-    gutterHeight: 50,
-    maxCol: 4,
-    checkImagesLoaded: false,
-    callbacks: {
-        
-        loadingFinished: function($loading, isBeyondMaxPage) {
-            if ( !isBeyondMaxPage ) {
-                $loading.fadeOut()
-            } else {
-                $loading.hide();
-                $('#page-navigation').show();
-            }
-        },
-        renderData: function (data, dataType) {
-            var tpl,
-                template,
-                resultNum = data.total;
-                
-            if ( resultNum < 16) {
-                $('#container').waterfall('pause', function() {
-                    $('#waterfall-message').html('<p style="color:#666;">no more data...</p>')
-                    //alert('no more data');
-                });
-            }
-    
-            if ( dataType === 'json' ||  dataType === 'jsonp'  ) { // json or jsonp format
-                tpl = $('#waterfall-tpl').html();
-                template = Handlebars.compile(tpl);
-    
-                return template(data);
-            } else { // html format
-                return data;
-            }
-        }
-    },
-    path: function(page) {
-       return 'data/data' + page + '.json';
-    }
-});
-</script>
+<ul class="nav nav-tabs" role="tablist" id="type-tab">
+	<li class="active"><a href="#tab-all" role="tab" data-toggle="tab">全站</a></li>
+	<li><a href="#tab-comic" role="tab" data-toggle="tab">动漫</a></li>
+	<li><a href="#tab-series" role="tab" data-toggle="tab">电视剧</a></li>
+</ul>
+
+<div class="tab-content">
+	<div class="tab-pane active" id="tab-all">
+		<div class="row feature">
+		{% if all_videos %}
+		{% for video in all_videos %}
+		<div class="col-md-3">
+			<a href = "{{video.url}}">
+				<img class="feature-image img-responsive" src="{{video.pic}}">
+				<p>{{video.title}}</p>
+			</a>
+			</div>
+		{% endfor %}
+		{% endif %}
+		</div>
+	</div>
+	<div class="tab-pane" id="tab-comic">
+		<div class="row feature">
+		{% if comic_videos %}
+		{% for video in comic_videos %}
+		<div class="col-md-3">
+			<a href = "{{video.url}}">
+				<img class="feature-image img-responsive" src="{{video.pic}}">
+				<p>{{video.title}}</p>
+			</a>
+			</div>
+		{% endfor %}
+		{% endif %}	
+		</div>
+	</div>
+	<div class="tab-pane" id="tab-series">
+		<div class="row feature">
+		{% if series_videos %}
+		{% for video in series_videos %}
+		<div class="col-md-3">
+			<a href = "{{video.url}}">
+				<img class="feature-image img-responsive" src="{{video.pic}}">
+				<p>{{video.title}}</p>
+			</a>
+			</div>
+		{% endfor %}
+		{% endif %}
+		</div>
+	</div>
+</div>
+
 <script type="text/javascript">
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-1245097-16']);

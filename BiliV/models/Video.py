@@ -5,7 +5,6 @@ class Video(db.Model):
 	__tablename__ = 'video'
 	id = db.Column(db.Integer, primary_key = True)
 	url = db.Column(db.String(100))
-	aid = db.Column(db.String(10))
 	play = db.Column(db.String(10))
 	title = db.Column(db.String(100))
 	author = db.Column(db.String(100))
@@ -14,6 +13,7 @@ class Video(db.Model):
 	pts = db.Column(db.String(10))
 	detail = db.Column(JSONType)    #all video json data
 
-	def __init__(self):
-		self.url = 'http://www.bilibili.com/video/av%s/' % (self.aid)
+	def __init__(self, id):
+		self.id = id
+		self.url = 'http://www.bilibili.com/video/av%d/' % (self.id)
 

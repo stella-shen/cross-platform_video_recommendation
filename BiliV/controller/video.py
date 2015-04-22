@@ -3,15 +3,19 @@ from BiliV.foundation import db
 from BiliV.models import Video
 import json
 
-def get_video_data(day):
-	bili_api = bili.BiliAPI(day)
-	video_json = bili_api.fetch()
-	video_set = video_json['list']
+def get_video_data(day, num, type):
+	bili_api = bili.BiliAPI(day, type)
+	video_set = bili_api.fetch()
+	#video_set = video_json['list']
+	video_list = []
+	cnt = 0
 	for video in video_set:
-		aid = video['aid']
-		current_video = Video.query.filter_by(aid == aid).first()
+		#print video
+		aid = int(video['aid'])
+		#print aid
+		current_video = Video.query.filter_by(id = aid).first()
 		if current_video is None:
-			current_video = Video(aid = aid)
+			current_video = Video(id = aid)
 			db.session.add(current_video)
 		current_video.play = video['play']
 		current_video.title = video['title']
@@ -21,4 +25,11 @@ def get_video_data(day):
 		current_video.pts = video['pts']
 		current_video.detail = video
 		db.session.commit()
+		#print current_video.id
+		if cnt < num:
+			video_list.append(current_video)
+			cnt = cnt + 1
+		else:
+			break
+	return video_list
 
