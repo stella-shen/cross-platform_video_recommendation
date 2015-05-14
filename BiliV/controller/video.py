@@ -3,8 +3,8 @@ from BiliV.foundation import db
 from BiliV.models import Video
 import json
 
-def get_video_data(day, num, type):
-	bili_api = bili.BiliAPI(day, type)
+def get_video_data(day, num, type, all_site = True):
+	bili_api = bili.BiliAPI(day, type, all_site)
 	video_set = bili_api.fetch()
 	#video_set = video_json['list']
 	video_list = []
@@ -23,6 +23,7 @@ def get_video_data(day, num, type):
 		current_video.description = video['description']
 		current_video.pic = video['pic']
 		current_video.pts = video['pts']
+		current_video.type = type
 		current_video.detail = video
 		db.session.commit()
 		#print current_video.id

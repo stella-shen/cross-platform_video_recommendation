@@ -11,6 +11,7 @@ class Video(db.Model):
 	description = db.Column(db.String(100))
 	pic = db.Column(db.String(200))
 	pts = db.Column(db.String(10))
+	type = db.Column(db.String(10))
 	detail = db.Column(JSONType)    #all video json data
 
 	def __init__(self, id):

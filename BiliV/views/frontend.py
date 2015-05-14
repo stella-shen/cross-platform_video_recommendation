@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, request, url_for, g
 from BiliV.foundation import db
 from BiliV.models.User import User
 from BiliV.models.Video import Video
-from BiliV.controller import video
+from BiliV.controller import video, get_weibo, get_recommend_video
 from flask.ext.login import login_user, logout_user, login_required
 from BiliV import const
 from SNS import sina
@@ -13,9 +13,9 @@ frontend = Blueprint('frontend', __name__, template_folder = 'templates')
 @frontend.route('/')
 @login_required
 def index():
-	all_videos = video.get_video_data(3, 4, const.ALL)
-	comic_videos = video.get_video_data(3, 4, const.COMIC)
-	series_videos = video.get_video_data(3, 4, const.SERIES)
+	all_videos = get_recommend_video.get_recommend_video(g.user.id)
+	comic_videos = video.get_video_data(3, 9, const.COMIC)
+	series_videos = video.get_video_data(3, 9, const.SERIES)
 	return render_template('frontend/index.html', all_videos = all_videos, comic_videos = comic_videos, series_videos = series_videos)
 
 @frontend.route('/login',)
@@ -55,8 +55,8 @@ def callback():
 
 		if need_fetch:
 			user.update()
+			get_weibo.get_weibo_data(user.access_token, user.id)	
 		db.session.commit()
-
 		login_user(user)
 		return redirect(url_for('.index'))
 	except:

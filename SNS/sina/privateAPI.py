@@ -36,10 +36,9 @@ class WeiboAPI(object):
 		url = self.build_url('users/show.json', {"uid": self.uid})
 		return self.fetch(url)
 
-	def get_weibo_data(self, id):
-		data_url = self.api_host + self.api_root + 'statuses/user_timeline.json?access_token=' + self.access_token + '&uid=' + str(id)
-		r = requests.get(data_url)
-		return r.text
+	def get_weibo_data(self):
+		url = self.build_url('statuses/user_timeline.json', {"access_token": self.access_token, "uid": self.uid})
+		return self.fetch(url)
 
 	def get_friends_list(self):
 		data_url = self.api_host + self.api_root + 'friendships/friends.json?access_token=' + self.access_token + '&uid=' + str(self.uid)

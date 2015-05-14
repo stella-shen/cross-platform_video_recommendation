@@ -17,10 +17,10 @@
 		<div class="row feature">
 		{% if all_videos %}
 		{% for video in all_videos %}
-		<div class="col-md-3">
+		<div class="item-wrap">
 			<a href = "{{url_for('.play', aid=video.id)}}">
-				<img class="feature-image img-responsive" src="{{video.pic}}">
-				<p>{{video.title}}</p>
+				<img class="feature-image img-responsive" src="{{video.pic}}" width="320" height="180"/>
+				<p class="item-info">{{video.title}}</p>
 			</a>
 			</div>
 		{% endfor %}
@@ -31,10 +31,10 @@
 		<div class="row feature">
 		{% if comic_videos %}
 		{% for video in comic_videos %}
-		<div class="col-md-3">
+		<div class="item-wrap">
 			<a href = "{{url_for('.play', aid=video.id)}}">
-				<img class="feature-image img-responsive" src="{{video.pic}}">
-				<p>{{video.title}}</p>
+				<img class="feature-image img-responsive" src="{{video.pic}}" width="320" height="180" />
+				<p class="item-info">{{video.title}}</p>
 			</a>
 			</div>
 		{% endfor %}
@@ -45,10 +45,10 @@
 		<div class="row feature">
 		{% if series_videos %}
 		{% for video in series_videos %}
-		<div class="col-md-3">
+		<div class="item-wrap">
 			<a href = "{{url_for('.play', aid=video.id)}}">
-				<img class="feature-image img-responsive" src="{{video.pic}}">
-				<p>{{video.title}}</p>
+				<img class="feature-image img-responsive" src="{{video.pic}}" width="320" height="180" />
+				<p class="item-info">{{video.title}}</p>
 			</a>
 			</div>
 		{% endfor %}
@@ -56,61 +56,6 @@
 		</div>
 	</div>
 </div>
-<!--<div role="tabpanel" >
-  <div class="tab-bar">
-    <ul class="nav nav-tabs" role="tablist">
-	  <li role="presentation" class="active"><a href="#all" aria-controls="all" role="tab" data-toggle="tab">全站</a></li>
-	  <li role="presentation"><a href="#comic" aria-controls="comic" role="tab" data-toggle="tab">动漫</a></li>
-	  <li role="presentation"><a href="#series" aria-controls="series" role="tab" data-toggle="tab">电视剧</a></li>
-    </ul>
-  </div>
-  <!-- Tab panes -->
-  <div class="tab-content">
-    <div role="tabpanel" class="tab-pane" id="all">
-	  <div class="tab-pane clearfix ">
-      {% if all_videos %}
-	  {% for video in all_videos %}
-	    <div class="item-wrap">
-		  <div class="item">
-		    <a href="{{video.url}}">
-		      <img src="{{video.pic}}" width="320" height="180" />
-			</a>
-			<div class="mask"></div>
-		  </div>
-		  <div class="item-info">
-			<a href="{{video.url}}">
-			  <p>{{video.title}}</p>
-			</a>
-		  </div>
-		</div>
-	  {% endfor %}
-	  {% endif %}
-	  </div>
-    </div>
-	<div role="tabpanel" class="tab-pane" id="all">
-	  <div class="tab-pane clearfix ">
-      {% if comiv_videos %}
-	  {% for video in comic_videos %}
-	    <div class="item-wrap">
-		  <div class="item">
-		    <a href="{{video.url}}">
-		      <img src="{{video.pic}}" width="320" height="180" />
-			</a>
-			<div class="mask"></div>
-		  </div>
-		  <div class="item-info">
-			<a href="{{video.url}}">
-			  <p>{{video.title}}</p>
-			</a>
-		  </div>
-		</div>
-	  {% endfor %}
-	  {% endif %}
-	  </div>
-    </div>
-  </div>
-</div>
--->
 {% endblock %}
 {% block title %}
 主页 - BiliV

@@ -1,6 +1,19 @@
 {% extends "base.html" %}
 {% block content %} 
 <div class="main">
+	{% if g.user and g.user.is_authenticated() %}
+	<div class="center">
+	  <div class="avatar">
+		  <img src="{{g.user.image_url}}">
+	  </div>
+	  <div class="link">
+		  <ul>
+			  <li>{{g.user.screen_name}}</li>
+			  <a href="http://weibo.com"><li class="fa fa-weibo fa-lg"></li></a>
+		  </ul>
+	  </div>
+  </div>
+  {% endif %}
    <!-- Nav tabs -->
   <div role="tabpanel" >
     <div class="tab-bar">
@@ -24,7 +37,7 @@
         <div class="mask"></div>
 	  </div>
 	  <div class="item-info">
-		  <a href="{{url_for('play', aid=like.id)}}">
+		  <a href="{{url_for('.play', aid=like.id)}}">
 			<p>{{like.title}}</p>
 		  </a>
 	  </div>

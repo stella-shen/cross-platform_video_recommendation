@@ -4,9 +4,9 @@ from BiliV.models import Weibo
 from BiliV.controller import basic
 import json
 
-def get_weibo_data(access_token, uid, id):
-	weibo_api = sina.privateAPI(access_token, uid)
-	weibo_json = json.loads(weibo_api.get_weibo_data(id))
+def get_weibo_data(access_token, uid):
+	weibo_api = sina.WeiboAPI(access_token, uid)
+	weibo_json = weibo_api.get_weibo_data()
 	weibo_set = weibo_json['statuses']
 	for weibo in weibo_set:
 		w_id = weibo['id']
