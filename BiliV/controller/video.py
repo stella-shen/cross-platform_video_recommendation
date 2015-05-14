@@ -34,3 +34,14 @@ def get_video_data(day, num, type, all_site = True):
 			break
 	return video_list
 
+def show_video_data(num, type):
+	res = []
+	videos = Video.query.filter_by(type = type).all()
+	cnt = 0
+	for v in videos:
+		res.append(v)
+		cnt = cnt + 1
+		if cnt == num:
+			break;
+	return res
+
