@@ -13,7 +13,7 @@ frontend = Blueprint('frontend', __name__, template_folder = 'templates')
 @frontend.route('/')
 @login_required
 def index():
-	all_videos = get_recommend_video.get_recommend_video(g.user.id)
+	all_videos = get_recommend_video.get_recommend_video_by_tfidf(g.user.id)
 	comic_videos = video.show_video_data(9, const.COMIC)
 	series_videos = video.show_video_data(9, const.SERIES)
 	return render_template('frontend/index.html', all_videos = all_videos, comic_videos = comic_videos, series_videos = series_videos)
