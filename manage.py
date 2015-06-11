@@ -2,7 +2,7 @@ from flask.ext.script import Server, Shell, Manager, prompt_bool
 from BiliV import create_app
 from BiliV.foundation import db
 from BiliV.models import User, Weibo, Video
-from BiliV.controller import video
+from BiliV.controller import video, get_barrage
 from BiliV import const 
 from SNS.bili import newlist
 import logging
@@ -45,6 +45,10 @@ def fetch_rank_video():
 @manager.command
 def fetch_new_list_video():
 	newlist.load()
+
+@manager.command
+def fetch_barrage():
+	get_barrage.get_barrage()
 
 if __name__ == "__main__":
 	manager.run()

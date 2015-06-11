@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from str_match import *
+from BiliV.models import Barrage
 from sklearn import feature_extraction
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.feature_extraction.text import CountVectorizer
@@ -43,10 +44,14 @@ def recommend_by_tfidf(video, weibo):
 	recmd = [] 
 	res = calculate_score(weibo)
 	words = res.keys()
-	print words
 	#words = words[5 : -5]
 	for v in video:
-		video_info = v.title + ' ' + v.description
+		barrages = Barrage.query.filter_by(avid = v.id).all()
+		barrage = ''
+		for b in barrages:
+			barrage = barrage + ' ' + b.text
+		video_info = v.title + ' ' + v.description + barrage
+		video_info = get_keyword(video_info)
 		for w in words:
 			if w in video_info:
 				recmd.append(v)

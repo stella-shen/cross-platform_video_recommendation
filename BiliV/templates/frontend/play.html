@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+<html xmlns:wb="http://open.weibo.com/wb">
 <div class="main">
   <div class="primary">
 	  <div class="video-container">
@@ -16,11 +17,12 @@
   {% endif %}
     <div id="operation" class="clearfix">
       <div id="operation-left">
-        <a href="#" class="btn btn-primary btn-weibo">
-        <span><i class="fa fa-weibo fa-lg"></i>分享</span>
+		  <a href="#">
+			  <wb:share-button appkey="4159940778" addition="full" type="button"></wb:share-button>
+        <!--span><i class="fa fa-weibo fa-lg"></i>分享</span-->
         </a>
-         <a href="#" class="btn btn-primary ">
-        <span><i class="fa fa-star-o fa-lg"></i>收藏</span>
+		<a href="{{url_for('.collect_video', aid=video.id)}}" class="btn btn-primary ">
+        <span><i id="favourite" class="fa fa-star-o fa-lg"></i>收藏</span>
         </a>
       </div>
       <div id="operation-right">

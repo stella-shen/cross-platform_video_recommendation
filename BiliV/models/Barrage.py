@@ -1,17 +1,18 @@
 from BiliV.foundation import db
 
-class Barrage(db):
-	__tablename__ = "bili_barrage"
+class Barrage(db.Model):
+	__tablename__ = "barrage"
 	  
-	lv = Column(Integer, primary_key = True)
-	avid = Column(Integer, ForeignKey('video.id'), nullable = False)
+	id = db.Column(db.Integer, primary_key=True)
+	avid = db.Column(db.Integer, db.ForeignKey('video.id'), nullable = False)
 	#fbid = Column(Integer, ForeignKey('bili_user.mid'), nullable = False)
-	text = Column(String(300)) # according to wikipedia
-	second = Column(Float)
-	mode = Column(Integer)
-	font_size = Column(Float)
-	color = Column(Integer)
-	timestamp = Column(Integer)
-	pool = Column(Integer)
-	owner = Column(String(30), nullable = False)
-	rowid = Column(Integer, primary_key = True)
+	text = db.Column(db.String(300)) # according to wikipedia
+	second = db.Column(db.Float)
+	mode = db.Column(db.Integer)
+	font_size = db.Column(db.Float)
+	color = db.Column(db.Integer)
+	timestamp = db.Column(db.Integer)
+	pool = db.Column(db.Integer)
+	owner = db.Column(db.String(30), nullable = False)
+	rowid = db.Column(db.Integer)
+

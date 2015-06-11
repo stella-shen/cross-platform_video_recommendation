@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, request, url_for, g
 from BiliV.foundation import db
 from BiliV.models.User import User
 from BiliV.models.Video import Video
+from BiliV.models.LikeRelationship import like_relationship
 from BiliV.controller import video, get_weibo, get_recommend_video
 from flask.ext.login import login_user, logout_user, login_required
 from BiliV import const
@@ -67,7 +68,8 @@ def callback():
 @frontend.route('/account')
 @login_required
 def account():
-	likes = video.get_video_data(1, 9, const.ALL)
+	user = g.user
+	likes = user.like_videos
 	return render_template('frontend/user.html', likes = likes)
 
 @frontend.route('/play', methods = ['GET', 'POST'])
@@ -79,3 +81,16 @@ def play():
 		return render_template('frontend/error.html')
 	recommend_videos = video.get_video_data(7, 5, const.ALL)
 	return render_template('frontend/play.html', video = play_video, recommend_videos=recommend_videos)
+
+@frontend.route('/collect_video', methods = ['GET', 'POST'])
+@login_required
+def collect_video():
+	aid = request.args.get('aid')
+	user = g.user
+	video = Video.query.filter_by(id = aid).first()
+	user.like_videos.append(video)
+	#db.session.add(current_collect)
+	db.session.commit()
+	return redirect(url_for('.play', aid = aid))
+		
+

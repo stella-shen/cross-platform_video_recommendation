@@ -4,6 +4,7 @@ from sqlalchemy_utils import ArrowType, JSONType
 from SNS import sina
 from flask.ext.login import UserMixin
 import arrow
+from LikeRelationship import *
 
 def analyze_gender(gender):
 	m = {
@@ -33,6 +34,7 @@ class User(db.Model, UserMixin):
 	detail = db.Column(JSONType)    #all weibo json data
 	weibo = db.relationship('Weibo', backref = 'user', lazy = 'dynamic')
 	friends = db.relationship('Friends', backref = 'user', lazy = 'dynamic')
+	like_videos = db.relationship('Video', secondary=like_relationship, backref=db.backref('users', lazy='dynamic'))
 
 	def __repr__(self):
 		return "<User %r>" % self.screen_name

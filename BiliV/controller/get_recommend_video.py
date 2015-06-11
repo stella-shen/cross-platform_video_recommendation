@@ -1,4 +1,4 @@
-from BiliV.models import Weibo, Video
+from BiliV.models import Weibo, Video, Barrage
 from BiliV.algorithm import recommend
 import random
 
