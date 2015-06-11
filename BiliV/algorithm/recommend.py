@@ -46,12 +46,13 @@ def recommend_by_tfidf(video, weibo):
 	words = res.keys()
 	#words = words[5 : -5]
 	for v in video:
-		barrages = Barrage.query.filter_by(avid = v.id).all()
-		barrage = ''
-		for b in barrages:
-			barrage = barrage + ' ' + b.text
-		video_info = v.title + ' ' + v.description + barrage
-		video_info = get_keyword(video_info)
+		#barrages = Barrage.query.filter_by(avid = v.id).all()
+		#barrage = ''
+		#for b in barrages:
+			#if b.text is not None:
+				#barrage = barrage + ' ' + b.text
+		video_info = v.title + ' ' + v.description
+		#video_info = get_keyword(video_info)
 		for w in words:
 			if w in video_info:
 				recmd.append(v)

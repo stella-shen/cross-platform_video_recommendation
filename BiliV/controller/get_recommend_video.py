@@ -7,7 +7,7 @@ def get_weibo_content(uid):
 	weibo = Weibo.query.filter_by(uid = uid).all()
 	for w in weibo:
 		res.append(w.text)
-	print res
+	#print res
 	return res
 
 def get_video_content():
@@ -16,7 +16,7 @@ def get_video_content():
 
 def get_recommend_video_by_str_match(uid):
 	weibo = get_weibo_content(uid)
-	print weibo
+	#print weibo
 	video = get_video_content()
 	res = recommend.recommend_by_str_match(video, weibo)
 	return res[ : 9]
