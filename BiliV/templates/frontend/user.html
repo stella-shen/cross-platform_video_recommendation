@@ -22,9 +22,11 @@
         <li role="presentation"><a href="#likes" aria-controls="likes" role="tab" data-toggle="tab">Likes</a></li>
       </ul>
     </div>
-  <!-- Tab panes -->
-    <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="profile" style="width:30%"><canvas id="canvas" height="450" width="450"></canvas></div>
+	  <!-- Tab panes -->
+		<div class="tab-content">
+			<div role="tabpanel" class="tab-pane active" id="profile" style="width:30%"><canvas id="canvas" height="450" width="450"></canvas>
+				<a href="{{url_for('.edit_interests')}}" class="btn btn-primary">修改</a>
+				</div>	
     <div role="tabpanel" class="tab-pane" id="likes">
 		<div class="tab-pane clearfix ">
 	{% if likes %}
@@ -38,13 +40,34 @@
 	  </div>
 	  <div class="item-info">
 		  <a href="{{url_for('.play', aid=like.id)}}">
-			<p>{{like.title}}</p>
+			<p style="width:320px; height=20px; text-overflow:ellipsis; white-space:nowrap; overflow:hidden;">{{like.title}}</p>
 		  </a>
 	  </div>
 	</div>
 	{% endfor %}
+	{% if cute %}
+	<p id="cute" data="{{cute}}" style="display:none"></p>
 	{% endif %}
-  </div>
+	{% if hot %}
+	<p id="hot" data="{{hot}}" style="display:none"></p>
+	{% endif %}
+	{% if liter %}
+	<p id="liter" data="{{liter}}" style="display:none"></p>
+	{% endif %}
+	{% if otaku %}
+	<p id="otaku" data="{{otaku}}" style="display:none"></p>
+	{% endif %}
+	{% if wierd %}
+	<p id="wierd" data="{{wierd}}" style="display:none"></p>
+	{% endif %}
+	{% if aj %}
+	<p id="aj" data="{{aj}}" style="display:none"></p>
+	{% endif %}
+	{% if fu %}
+	<p id="fu" data="{{fu}}" style="display:none"></p>
+	{% endif %}
+	</div>
+	{% endif %}
 </div>
 <script src="{{url_for('static', filename='js/libs/jquery/jquery.js')}}" ></script>
 <script src="{{url_for('static', filename='js/bootstrap.min.js')}}" ></script>
@@ -57,7 +80,22 @@
       $('#myTab a:last').tab('show')
     })
     </script>
- <script>
+	<script>
+		var cute = $('#cute').attr('data')
+		cute = parseInt(cute)
+		var hot = $('#hot').attr('data')
+		hot = parseInt(hot)
+		var liter = $('#liter').attr('data')
+		liter = parseInt(liter)
+		var wierd = $('#wierd').attr('data')
+		wierd = parseInt(wierd)
+		var otaku = $('#otaku').attr('data')
+		otaku = parseInt(otaku)
+		var aj = $('#aj').attr('data')
+		aj = parseInt(aj)
+		var fu = $('#fu').attr('data')
+		fu = parseInt(fu)
+
   var radarChartData = {
     labels: ["萌", "燃", "宅", "腐", "傲娇", "鬼畜", "文艺"],
     datasets: [
@@ -69,7 +107,7 @@
         pointStrokeColor: "#fff",
         pointHighlightFill: "#fff",
         pointHighlightStroke: "rgba(245,72,79,1)",
-        data: [28,48,40,19,96,27,100]
+        data: [cute,hot,otaku,fu,aj,wierd,liter]
       }
     ]
   };

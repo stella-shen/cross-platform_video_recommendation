@@ -17,7 +17,12 @@ def index():
 	all_videos = get_recommend_video.get_recommend_video_by_tfidf(g.user.id)
 	comic_videos = video.show_video_data(9, const.COMIC)
 	series_videos = video.show_video_data(9, const.SERIES)
-	return render_template('frontend/index.html', all_videos = all_videos, comic_videos = comic_videos, series_videos = series_videos)
+	dance_videos = video.show_video_data(9, const.DANCE)
+	music_videos = video.show_video_data(9, const.MUSIC)
+	movie_videos = video.show_video_data(9, const.MOVIE)
+	wierd_videos = video.show_video_data(9, const.WIERD)
+	science_videos = video.show_video_data(9, const.SCIENCE)
+	return render_template('frontend/index.html', all_videos = all_videos, comic_videos = comic_videos, series_videos = series_videos, dance_videos = dance_videos, music_videos = music_videos, movie_videos = movie_videos, wierd_videos = wierd_videos, science_videos = science_videos)
 
 @frontend.route('/login',)
 def login():
@@ -65,12 +70,30 @@ def callback():
 		db.session.rollback()
 		return render_template('frontend/error.html')
 
-@frontend.route('/account')
+@frontend.route('/account', methods = ['GET', 'POST'])
 @login_required
 def account():
 	user = g.user
+	try:
+		cute = int(request.args['cute'])
+		hot = int(request.args['hot'])
+		liter = int(request.args['liter'])
+		otaku = int(request.args['otaku'])
+		wierd = int(request.args['wierd'])
+		aj = int(request.args['aj'])
+		fu = int(request.args['fu'])
+		user.cute = cute
+		user.hot = hot
+		user.liter = liter
+		user.otaku = otaku
+		user.wierd = wierd
+		user.aj = aj
+		user.fu = fu
+		db.session.commit()
+	except:
+		pass
 	likes = user.like_videos
-	return render_template('frontend/user.html', likes = likes)
+	return render_template('frontend/user.html', likes = likes, cute = user.cute, hot = user.hot, liter = user.liter, otaku = user.otaku, wierd = user.wierd, aj = user.aj, fu = user.fu)
 
 @frontend.route('/play', methods = ['GET', 'POST'])
 @login_required
@@ -79,7 +102,7 @@ def play():
 	play_video = Video.query.filter_by(id = aid).first()
 	if play_video is None:
 		return render_template('frontend/error.html')
-	recommend_videos = video.get_video_data(7, 5, const.ALL)
+	recommend_videos = video.get_video_data(7, 6, const.ALL)
 	return render_template('frontend/play.html', video = play_video, recommend_videos=recommend_videos)
 
 @frontend.route('/collect_video', methods = ['GET', 'POST'])
@@ -92,5 +115,9 @@ def collect_video():
 	#db.session.add(current_collect)
 	db.session.commit()
 	return redirect(url_for('.play', aid = aid))
-		
+
+@frontend.route('/edit_interests', methods = ['GET', 'POST'])
+@login_required
+def edit_interests():
+	return render_template('frontend/waiting.html')
 

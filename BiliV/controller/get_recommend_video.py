@@ -1,4 +1,6 @@
-from BiliV.models import Weibo, Video, Barrage
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+from BiliV.models import User, Weibo, Video, Barrage
 from BiliV.algorithm import recommend
 import random
 
@@ -7,6 +9,22 @@ def get_weibo_content(uid):
 	weibo = Weibo.query.filter_by(uid = uid).all()
 	for w in weibo:
 		res.append(w.text)
+	user = User.query.filter_by(id = uid).first()
+	res.append(user.description)
+	if user.cute is not None and user.cute > 50:
+		res.append(u'萌')
+	if user.hot is not None and user.hot > 50:
+		res.append(u'燃')
+	if user.wierd is not None and user.wierd > 50:
+		res.append(u'鬼畜')
+	if user.otaku is not None and user.otaku > 50:
+		res.append(u'宅')
+	if user.liter is not None and user.liter > 50:
+		res.append(u'文艺')
+	if user.aj is not None and user.aj > 50:
+		res.append(u'傲娇')
+	if user.fu is not None and user.fu > 50:
+		res.append(u'腐')
 	#print res
 	return res
 

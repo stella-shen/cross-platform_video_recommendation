@@ -2,6 +2,7 @@ from SNS import bili
 from BiliV.foundation import db
 from BiliV.models import Video
 import json
+import random
 
 def get_video_data(day, num, type, all_site = True):
 	bili_api = bili.BiliAPI(day, type, all_site)
@@ -37,11 +38,14 @@ def get_video_data(day, num, type, all_site = True):
 def show_video_data(num, type):
 	res = []
 	videos = Video.query.filter_by(type = type).all()
+	"""
 	cnt = 0
 	for v in videos:
 		res.append(v)
 		cnt = cnt + 1
 		if cnt == num:
 			break;
+	"""
+	res = random.sample(videos, 9)
 	return res
 

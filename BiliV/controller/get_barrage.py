@@ -9,6 +9,7 @@ import re, sys
 from sqlalchemy import and_
 
 default_encoding = 'utf-8'
+cnt = 0
 if sys.getdefaultencoding() != default_encoding:
 	reload(sys)
 	sys.setdefaultencoding(default_encoding)
@@ -32,7 +33,7 @@ def read_xml(url):
 	r = webs.get(url)
 	r.encoding = 'utf-8'
 	text = r.text
-	if text[-1] != '>':
+	if text is not None and text[-1] != '>':
 		text += '>'
 	text = re.sub(u'[\x00-\x08\x0b-\x0c\x0e-\x1f]+', u'', text)
 	return text
@@ -49,7 +50,12 @@ def extract_xml(avid):
 	#root = ET.parse(xml).getroot()
 	#xml_file.close()
 	all_barrage = root.findall('d')
+	global cnt
 	for b in all_barrage:
+		cnt = cnt + 1
+		if cnt <= 314932:
+			print cnt
+			continue
 		attr = b.attrib.get('p').split(',')
 		second = float(attr[0])
 		mode = int(attr[1])

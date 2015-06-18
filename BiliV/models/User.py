@@ -30,7 +30,13 @@ class User(db.Model, UserMixin):
 	friends_cnt = db.Column(db.Integer)
 	statuses_cnt = db.Column(db.Integer)
 	bi_followers_count = db.Column(db.Integer)
-
+	cute = db.Column(db.Integer)
+	hot = db.Column(db.Integer)
+	liter = db.Column(db.Integer)
+	wierd = db.Column(db.Integer)
+	aj = db.Column(db.Integer)
+	otaku = db.Column(db.Integer)
+	fu = db.Column(db.Integer)
 	detail = db.Column(JSONType)    #all weibo json data
 	weibo = db.relationship('Weibo', backref = 'user', lazy = 'dynamic')
 	friends = db.relationship('Friends', backref = 'user', lazy = 'dynamic')
