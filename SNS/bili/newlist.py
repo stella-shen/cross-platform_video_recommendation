@@ -3,7 +3,7 @@ from BiliV.controller.network import HLSession
 from bs4 import BeautifulSoup
 import re, logging
 from BiliV.models import Video
-from BiliV.foundation import db
+from BiliV.foundation import Base, sb_session
 
 video_num_regex = re.compile(r'\/video\/av(\d+)/')
 video_type_regex = re.compile(r'\/newlist.html\?typeid=(\d+)')

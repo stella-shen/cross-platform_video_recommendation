@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from str_match import *
+from basic import *
 from BiliV.models import Barrage
 from sklearn import feature_extraction
 from sklearn.feature_extraction.text import TfidfTransformer

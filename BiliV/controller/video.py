@@ -1,5 +1,5 @@
 from SNS import bili
-from BiliV.foundation import db
+from BiliV.foundation import db_session, Base
 from BiliV.models import Video
 import json
 import random
@@ -17,7 +17,7 @@ def get_video_data(day, num, type, all_site = True):
 		current_video = Video.query.filter_by(id = aid).first()
 		if current_video is None:
 			current_video = Video(id = aid)
-			db.session.add(current_video)
+			db_session.add(current_video)
 		current_video.play = video['play']
 		current_video.title = video['title']
 		current_video.author = video['author']
@@ -26,7 +26,7 @@ def get_video_data(day, num, type, all_site = True):
 		current_video.pts = video['pts']
 		current_video.type = type
 		current_video.detail = video
-		db.session.commit()
+		db_session.commit()
 		#print current_video.id
 		if cnt < num:
 			video_list.append(current_video)
@@ -37,15 +37,13 @@ def get_video_data(day, num, type, all_site = True):
 
 def show_video_data(num, type):
 	res = []
-	videos = Video.query.filter_by(type = type).all()
-	"""
+	videos = Video.query.all()
 	cnt = 0
-	for v in videos:
-		res.append(v)
-		cnt = cnt + 1
-		if cnt == num:
-			break;
-	"""
-	res = random.sample(videos, 9)
+	for video in videos:
+		if type in video.videotype:
+			res.append(video)
+			cnt = cnt + 1
+			if cnt == num:
+				break;
 	return res
 

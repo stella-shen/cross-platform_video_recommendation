@@ -1,4 +1,4 @@
-from BiliV.foundation import db
+'''from BiliV.foundation import db
 
 class Friends(db.Model):
 	__tablename__ = 'friends'
@@ -16,4 +16,4 @@ class Friends(db.Model):
 
 	def __str__(self):
 		return self.id
-
+'''

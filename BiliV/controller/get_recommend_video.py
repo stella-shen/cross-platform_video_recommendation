@@ -1,9 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from BiliV.models import User, Weibo, Video, Barrage
-from BiliV.algorithm import recommend
+from BiliV.models import WeiboUser, WeiboTweet, Video
+#from BiliV.algorithm import recommend
 import random
-
+import sys
+'''
 def get_weibo_content(uid):
 	res = []
 	weibo = Weibo.query.filter_by(uid = uid).all()
@@ -44,4 +45,11 @@ def get_recommend_video_by_tfidf(uid):
 	video = get_video_content()
 	res = recommend.recommend_by_tfidf(video, weibo)
 	return random.sample(res, 9)
+'''
+
+def get_random_video(num):
+	res = []
+	videos = Video.query.all()
+	res = random.sample(videos, num)
+	return res
 

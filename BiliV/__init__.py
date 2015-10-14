@@ -1,8 +1,8 @@
 from flask import Flask, g, session, redirect, json, url_for, render_template
 from flask.ext.login import current_user
 from BiliV import views
-from BiliV.foundation import db, login_manager
-from BiliV.models import User, Weibo
+from BiliV.foundation import login_manager, db_session
+from BiliV.models import WeiboUser
 
 DEFAULT_MODULES = [
 	views.frontend
@@ -17,11 +17,11 @@ def create_app():
 	return app
 
 def configure_foundations(app):
-	db.app = app
-	db.init_app(app)
+	#db.app = app
+	#db.init_app(app)
 	@app.after_request
 	def releaseDB(response):
-		db.session.close()
+		db_session.remove()
 		return response
 	login_manager.init_app(app)
 	login_manager.login_view = 'frontend.login'
@@ -29,7 +29,7 @@ def configure_foundations(app):
 	@login_manager.user_loader
 	def load_user(id):
 		try:
-			return User.query.get(int(id))
+			return WeiboUser.query.get(int(id))
 		except Exception:
 			return None
 	@app.before_request

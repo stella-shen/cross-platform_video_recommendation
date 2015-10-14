@@ -18,3 +18,5 @@ jieba==0.36.2
 numpy==1.9.2
 scipy==0.15.1
 scikit-learn==0.16.1
+click==5.1
+importlib==1.0.3

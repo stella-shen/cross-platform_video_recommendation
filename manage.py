@@ -1,18 +1,18 @@
 from flask.ext.script import Server, Shell, Manager, prompt_bool
 from BiliV import create_app
-from BiliV.foundation import db
-from BiliV.models import User, Weibo, Video
-from BiliV.controller import video, get_barrage
+#from BiliV.foundation import db
+from BiliV.models import WeiboUser, WeiboTweet, Video
+#from BiliV.controller import video, get_barrage
 from BiliV import const 
-from SNS.bili import newlist
-import logging
+#from SNS.bili import newlist
+import logging, click
 
 app_ = create_app()
 app_.debug = True
 manager = Manager(app_)
 
 manager.add_command("runserver", Server('0.0.0.0', port = 8081))
-
+'''
 def _make_context():
 	return dict(db = db)
 manager.add_command("shell", Shell(make_context = _make_context()))
@@ -21,12 +21,16 @@ def _addUser(uid, access_token):
 	user = User(id = uid, access_token = access_token)
 	db.session.add(user)
 	db.session.commit()
-
+'''
 @manager.command
-def createall():
-	db.create_all()
+def initdb():
+	from BiliV.init import create_db
+	create_db()
+	from config import DB_STRING
 	#_addUser('admin', 'admin')
-
+	click.echo('DB String: %s' % DB_STRING)
+	return
+'''
 @manager.command
 def dropall():
 	if prompt_bool("Are you sure? You will lose all your data!"):
@@ -49,6 +53,6 @@ def fetch_new_list_video():
 @manager.command
 def fetch_barrage():
 	get_barrage.get_barrage()
-
+'''
 if __name__ == "__main__":
 	manager.run()

@@ -1,4 +1,4 @@
-from BiliV.foundation import db
+'''from BiliV.foundation import db
 
 class Barrage(db.Model):
 	__tablename__ = "barrage"
@@ -15,4 +15,4 @@ class Barrage(db.Model):
 	pool = db.Column(db.Integer)
 	owner = db.Column(db.String(30), nullable = False)
 	rowid = db.Column(db.Integer)
-
+'''
