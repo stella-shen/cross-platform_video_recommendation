@@ -42,7 +42,7 @@
 	  <a href="{{url_for('.play', aid=video.id)}}">
             <span class="thumb"><img src="{{video.pic}}" width="160" height="80"></span>
 			<span class="title">{{video.title}}</span>
-			<span class="info">{{video.pts}}次播放</span>
+			<span class="info">{{video.play}}次播放</span>
 		</a></li>
 	{% endfor %}
 	{% endif %}

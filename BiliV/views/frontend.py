@@ -106,7 +106,7 @@ def play():
 	play_video = Video.query.filter_by(id = aid).first()
 	if play_video is None:
 		return render_template('frontend/error.html')
-	recommend_videos = video.get_video_data(7, 6, const.ALL)
+	recommend_videos = video.show_video_data(6, u'')
 	return render_template('frontend/play.html', video = play_video, recommend_videos=recommend_videos)
 
 @frontend.route('/collect_video', methods = ['GET', 'POST'])
