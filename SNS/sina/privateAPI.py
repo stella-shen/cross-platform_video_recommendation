@@ -40,7 +40,10 @@ class WeiboAPI(object):
 		url = self.build_url('statuses/user_timeline.json', {"access_token": self.access_token, "uid": self.uid})
 		return self.fetch(url)
 
-	def get_friends_list(self):
-		data_url = self.api_host + self.api_root + 'friendships/friends.json?access_token=' + self.access_token + '&uid=' + str(self.uid)
-		r = requests.get(data_url)
-		return r.text
+	def get_followed_list(self):
+		url = self.build_url('friendships/friends.json', {"access_token": self.access_token, "uid": self.uid, "count": str(200)})
+		return self.fetch(url)
+
+	def get_follower_list(self):
+		url = self.build_url('friendships/followers.json', {"access_token": self.access_token, "uid": self.uid, "count": str(200)})
+		return self.fetch(url)

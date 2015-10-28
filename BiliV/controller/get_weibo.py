@@ -1,8 +1,9 @@
 from SNS import sina
-from BiliV.foundation import db
-from BiliV.models import Weibo
+from BiliV.foundation import db_session, Base
+from BiliV.models import WeiboTweet
 from BiliV.controller import basic
 import json
+import urllib2
 
 def get_weibo_data(access_token, uid):
 	weibo_api = sina.WeiboAPI(access_token, uid)
@@ -10,10 +11,10 @@ def get_weibo_data(access_token, uid):
 	weibo_set = weibo_json['statuses']
 	for weibo in weibo_set:
 		w_id = weibo['id']
-		current_weibo = Weibo.query.filter_by(id = w_id).first()
+		current_weibo = WeiboTweet.query.filter_by(id = w_id).first()
 		if current_weibo is None:
-			current_weibo = Weibo(id = w_id)
-			db.session.add(current_weibo)
+			current_weibo = WeiboTweet(id = w_id)
+			db_session.add(current_weibo)
 		current_weibo.text = weibo['text']
 		timestr = weibo['created_at']
 		timeinfo = basic.analyze_timestr(timestr)
@@ -24,5 +25,10 @@ def get_weibo_data(access_token, uid):
 		current_weibo.comments_cnt = weibo['comments_count']
 		current_weibo.uid = uid
 		current_weibo.data_set = str(weibo)
-		db.session.commit()
+		db_session.commit()
 
+def weibo_page(uid):
+	req = urllib2.Request('http://weibo.com/u/' + str(uid))
+	response = urllib2.urlopen(req)
+	page = response.read()
+	return page

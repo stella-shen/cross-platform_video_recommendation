@@ -1,55 +1,22 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from BiliV.models import WeiboUser, WeiboTweet, Video
-#from BiliV.algorithm import recommend
-import random
-import sys
-'''
-def get_weibo_content(uid):
-	res = []
-	weibo = Weibo.query.filter_by(uid = uid).all()
-	for w in weibo:
-		res.append(w.text)
-	user = User.query.filter_by(id = uid).first()
-	res.append(user.description)
-	if user.cute is not None and user.cute > 50:
-		res.append(u'萌')
-	if user.hot is not None and user.hot > 50:
-		res.append(u'燃')
-	if user.wierd is not None and user.wierd > 50:
-		res.append(u'鬼畜')
-	if user.otaku is not None and user.otaku > 50:
-		res.append(u'宅')
-	if user.liter is not None and user.liter > 50:
-		res.append(u'文艺')
-	if user.aj is not None and user.aj > 50:
-		res.append(u'傲娇')
-	if user.fu is not None and user.fu > 50:
-		res.append(u'腐')
-	#print res
-	return res
+from BiliV.models import Video, RecommendRelation
+from BiliV.algorithm import algorithm
+from BiliV.foundation import db_session
 
-def get_video_content():
-	videos = Video.query.all()
-	return videos
+def store_into_database(uid, vid, algorithm_name):
+	recommend = RecommendRelation.query.filter_by(weibo_user_id=uid, bili_video_id=vid, algorithm = algorithm_name).first()
+	if recommend is None:
+		current_recommend = RecommendRelation(weibo_user_id=uid, bili_video_id = vid, algorithm = algorithm_name)
+		db_session.add(current_recommend)
+		#db_session.commit()
 
-def get_recommend_video_by_str_match(uid):
-	weibo = get_weibo_content(uid)
-	#print weibo
-	video = get_video_content()
-	res = recommend.recommend_by_str_match(video, weibo)
-	return res[ : 9]
-
-def get_recommend_video_by_tfidf(uid):
-	weibo = get_weibo_content(uid)
-	video = get_video_content()
-	res = recommend.recommend_by_tfidf(video, weibo)
-	return random.sample(res, 9)
-'''
-
-def get_random_video(num):
-	res = []
-	videos = Video.query.all()
-	res = random.sample(videos, num)
-	return res
+def store_recommend_video(uid, num, algorithm_name):
+	vlist = Video.query.all()
+	if algorithm_name == 'VisitSort':
+		recommend_video_list = algorithm.VisitSort(uid, vlist, num)
+		for rec_v in recommend_video_list:
+			store_into_database(uid, rec_v.id, algorithm_name)
+		db_session.commit()
+	return
 

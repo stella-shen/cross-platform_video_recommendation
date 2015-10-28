@@ -2,7 +2,7 @@ from flask.ext.script import Server, Shell, Manager, prompt_bool
 from BiliV import create_app
 #from BiliV.foundation import db
 from BiliV.models import WeiboUser, WeiboTweet, Video
-#from BiliV.controller import video, get_barrage
+from BiliV.controller import get_weibo, get_recommend_video
 from BiliV import const 
 #from SNS.bili import newlist
 import logging, click
@@ -54,5 +54,16 @@ def fetch_new_list_video():
 def fetch_barrage():
 	get_barrage.get_barrage()
 '''
+
+@manager.command
+def get_user_weibo_page():
+	page = get_weibo.weibo_page(2656565891)
+	print page
+
+@manager.command
+def store_recommend_video():
+	get_recommend_video.store_recommend_video(2656565891, 20, 'VisitSort')
+	print "success"
+
 if __name__ == "__main__":
 	manager.run()

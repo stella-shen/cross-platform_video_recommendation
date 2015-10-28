@@ -3,19 +3,23 @@ from flask import Blueprint, render_template, redirect, request, url_for, g
 from BiliV.foundation import Base, db_session
 from BiliV.models import Video, WeiboUser
 #from BiliV.models.LikeRelationship import like_relationship
-from BiliV.controller import video, get_recommend_video
+from BiliV.algorithm import algorithm
+from BiliV.controller import video, get_recommend_video, get_weibo, friends
 from flask.ext.login import login_user, logout_user, login_required
 from BiliV import const
 from SNS import sina
-import arrow
+import arrow, random
 
 frontend = Blueprint('frontend', __name__, template_folder = 'templates')
 
 @frontend.route('/')
 @login_required
 def index():
-	#return 'login successed'
-	all_videos = get_recommend_video.get_random_video(9)
+	get_weibo.get_weibo_data(g.user.access_token, g.user.id)
+	friends.get_friends_data(g.user.access_token, g.user.id)
+	user = WeiboUser.query.filter_by(id=g.user.id).first()
+	all_recommend = user.biliv_recommend_videos
+	all_videos = random.sample(all_recommend, 9)
 	comic_videos = video.show_video_data(9, u'动漫')
 	series_videos = video.show_video_data(9, u'电视剧')
 	dance_videos = video.show_video_data(9, u'舞蹈')
@@ -63,20 +67,19 @@ def callback():
 
 		if need_fetch:
 			user.update()
-			#get_weibo.get_weibo_data(user.access_token, user.id)	
+			get_weibo.get_weibo_data(user.access_token, user.id)	
 		db_session.commit()
 		login_user(user)
 		return redirect(url_for('.index'))
 	except:
 		raise
-		db.session.rollback()
+		db_session.rollback()
 		return render_template('frontend/error.html')
 
 @frontend.route('/account', methods = ['GET', 'POST'])
 @login_required
 def account():
-	return 'account'
-'''
+	#return 'account'
 	user = g.user
 	try:
 		cute = int(request.args['cute'])
@@ -93,12 +96,12 @@ def account():
 		user.wierd = wierd
 		user.aj = aj
 		user.fu = fu
-		db.session.commit()
+		db_session.commit()
 	except:
 		pass
 	likes = user.like_videos
 	return render_template('frontend/user.html', likes = likes, cute = user.cute, hot = user.hot, liter = user.liter, otaku = user.otaku, wierd = user.wierd, aj = user.aj, fu = user.fu)
-'''
+
 @frontend.route('/play', methods = ['GET', 'POST'])
 @login_required
 def play():
@@ -112,16 +115,15 @@ def play():
 @frontend.route('/collect_video', methods = ['GET', 'POST'])
 @login_required  
 def collect_video():
-	return 'collect video'
-'''
+	#return 'collect video'
 	aid = request.args.get('aid')
 	user = g.user
 	video = Video.query.filter_by(id = aid).first()
 	user.like_videos.append(video)
 	#db.session.add(current_collect)
-	db.session.commit()
+	db_session.commit()
 	return redirect(url_for('.play', aid = aid))
-'''
+
 @frontend.route('/edit_interests', methods = ['GET', 'POST'])
 @login_required
 def edit_interests():
