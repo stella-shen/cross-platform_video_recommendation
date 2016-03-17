@@ -5,7 +5,9 @@ from BiliV.foundation import login_manager, db_session
 from BiliV.models import WeiboUser
 
 DEFAULT_MODULES = [
-	views.frontend
+	views.frontend,
+	views.account,
+	views.play
 ]
 
 def create_app():
@@ -39,7 +41,10 @@ def configure_foundations(app):
 
 def configure_blueprint(app, modules):
 	for module in modules:
-		app.register_blueprint(module)
+		if module.name == "frontend":
+			app.register_blueprint(module)
+		else:
+			app.register_blueprint(module, url_prefix="/%s" % (module.name))
 
 def configure_template_filter(app):
 	@app.template_filter('dateint')

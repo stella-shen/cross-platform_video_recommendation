@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block content %} 
+<div class="main">
+	{% if g.user and g.user.is_authenticated() %}
+	<div class="center">
+	  <div class="avatar">
+		  <img src="{{g.user.image_url}}">
+	  </div>
+	  <div class="link">
+		  <ul>
+			  <li>{{g.user.screen_name}}</li>
+			  <a href="http://weibo.com"><li class="fa fa-weibo fa-lg"></li></a>
+		  </ul>
+	  </div>
+  </div>
+  {% endif %}
+   <!-- Nav tabs -->
+  <div role="tabpanel" >
+    <div class="tab-bar">
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
+        <li role="presentation"><a href="#likes" aria-controls="likes" role="tab" data-toggle="tab">Likes</a></li>
+      </ul>
+    </div>
+	  <!-- Tab panes -->
+		<div class="tab-content">
+			<div role="tabpanel" class="tab-pane active" id="profile" style="width:30%"><canvas id="canvas" height="450" width="450"></canvas>
+				<a href="{{url_for('.edit_interests')}}" class="btn btn-primary">修改</a>
+				</div>	
+    <div role="tabpanel" class="tab-pane" id="likes">
+		<div class="tab-pane clearfix ">
+	{% if likes %}
+	{% for like in likes %}
+    <div class="item-wrap">
+      <div class="item">
+		  <a href="{{url_for('play.index', aid=like.id)}}">
+			  <img src="{{like.pic}}" width="320" height="180" />
+		  </a>
+        <div class="mask"></div>
+	  </div>
+	  <div class="item-info">
+		  <a href="{{url_for('play.index', aid=like.id)}}">
+			<p style="width:320px; height=20px; text-overflow:ellipsis; white-space:nowrap; overflow:hidden;">{{like.title}}</p>
+		  </a>
+	  </div>
+	</div>
+	{% endfor %}
+	{% if cute %}
+	<p id="cute" data="{{cute}}" style="display:none"></p>
+	{% endif %}
+	{% if hot %}
+	<p id="hot" data="{{hot}}" style="display:none"></p>
+	{% endif %}
+	{% if liter %}
+	<p id="liter" data="{{liter}}" style="display:none"></p>
+	{% endif %}
+	{% if otaku %}
+	<p id="otaku" data="{{otaku}}" style="display:none"></p>
+	{% endif %}
+	{% if wierd %}
+	<p id="wierd" data="{{wierd}}" style="display:none"></p>
+	{% endif %}
+	{% if aj %}
+	<p id="aj" data="{{aj}}" style="display:none"></p>
+	{% endif %}
+	{% if fu %}
+	<p id="fu" data="{{fu}}" style="display:none"></p>
+	{% endif %}
+	</div>
+	{% endif %}
+</div>
+<script src="{{url_for('static', filename='js/libs/jquery/jquery.js')}}" ></script>
+<script src="{{url_for('static', filename='js/bootstrap.min.js')}}" ></script>
+<script src="{{url_for('static', filename='js/libs/handlebars/handlebars.js')}}"></script>
+<script src="{{url_for('static', filename='js/waterfall.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/Chart.js')}}"></script>
+
+ <script>
+    $(function () {
+      $('#myTab a:last').tab('show')
+    })
+    </script>
+	<script>
+		var cute = $('#cute').attr('data')
+		cute = parseInt(cute)
+		var hot = $('#hot').attr('data')
+		hot = parseInt(hot)
+		var liter = $('#liter').attr('data')
+		liter = parseInt(liter)
+		var wierd = $('#wierd').attr('data')
+		wierd = parseInt(wierd)
+		var otaku = $('#otaku').attr('data')
+		otaku = parseInt(otaku)
+		var aj = $('#aj').attr('data')
+		aj = parseInt(aj)
+		var fu = $('#fu').attr('data')
+		fu = parseInt(fu)
+
+  var radarChartData = {
+    labels: ["萌", "燃", "宅", "腐", "傲娇", "鬼畜", "文艺"],
+    datasets: [
+      {
+        label: "My Second dataset",
+        fillColor: "rgba(245,72,79,0.7)",
+        strokeColor: "rgba(245,72,79,1)",
+        pointColor: "rgba(245,72,79,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(245,72,79,1)",
+        data: [cute,hot,otaku,fu,aj,wierd,liter]
+      }
+    ]
+  };
+
+  window.onload = function(){
+    window.myRadar = new Chart(document.getElementById("canvas").getContext("2d")).Radar(radarChartData, {
+      responsive: true,
+      pointLabelFontFamily : "'微软雅黑'",
+      pointLabelFontSize : 18,
+      pointLabelFontColor : "#4d535f",
+      angleLineWidth : 2,
+
+    });
+  }
+
+  </script>
+{% endblock %}
+{% block title %}
+个人信息
+{% endblock %}
+

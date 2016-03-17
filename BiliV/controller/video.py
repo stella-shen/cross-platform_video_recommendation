@@ -40,6 +40,8 @@ def show_video_data(num, type):
 	videos = Video.query.all()
 	cnt = 0
 	for video in videos:
+		if video.videotype is None:
+			continue
 		if type in video.videotype:
 			res.append(video)
 			cnt = cnt + 1

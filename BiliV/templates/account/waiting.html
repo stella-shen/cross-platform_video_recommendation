@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<div class="main">
+	{% if g.user and g.user.is_authenticated() %}
+	<div calss="center">
+		<div class="avatar">
+			<img src="{{g.user.image_url}}">
+		</div>
+		<div class="link">
+			<ul>
+				<li>{{g.user.screen_name}}</li>
+				<a href = "http://weibo.com"><li class="fa fa-weibo fa-lg"></li></a>
+			</ul>
+		</div>
+	</div>
+	{% endif %}
+	<div class="row">
+		<div class="col-md-3">
+			<p>
+			<label class="h4" for="cute">萌</label>
+			<input class="h4" id="cute" readonly size=4 style="border:0; color:#f6931f; font-weight=bold;">
+			</p>
+			<div id="slider-vertical-cute" style="height:200px;"></div>
+		</div>
+		<div class="col-md-3">
+			<p>
+			<label class="h4" for="liter">文艺</label>
+			<input class="h4" id="liter" readonly size=4 style="border:0; color:#f6931f; font-weight=bold;">
+			</p>
+			<div id="slider-vertical-liter" style="height:200px;"></div>
+		</div>
+		<div class="col-md-3">
+			<p>
+			<label class="h4" for="hot">燃</label>
+			<input class="h4" id="hot" readonly size=4 style="border:0; color:#f6931f; font-weight=bold;">
+			</p>
+			<div id="slider-vertical-hot" style="height:200px;"></div>
+		</div>
+		<div class="col-md-3">
+			<p>
+			<label class="h4" for="wierd">鬼畜</label>
+			<input class="h4" id="wierd" readonly size=4 style="border:0; color:#f6931f; font-weight=bold;">
+			</p>
+			<div id="slider-vertical-wierd" style="height:200px;"></div>
+		</div>
+		<div class="col-md-3">
+			<p>
+			<label class="h4" for="otaku">宅</label>
+			<input class="h4" id="otaku" readonly size=4 style="border:0; color:#f6931f; font-weight=bold;">
+			</p>
+			<div id="slider-vertical-otaku" style="height:200px;"></div>
+		</div>
+		<div class="col-md-3">
+			<p>
+			<label class="h4" for="aj">傲娇</label>
+			<input class="h4" id="aj" readonly size=4 style="border:0; color:#f6931f; font-weight=bold;">
+			</p>
+			<div id="slider-vertical-aj" style="height:200px;"></div>
+		</div>
+		<div class="col-md-3">
+			<p>
+			<label class="h4" for="fu">腐</label>
+			<input class="h4" id="fu" readonly size=4 style="border:0; color:#f6931f; font-weight=bold;">
+			</p>
+			<div id="slider-vertical-fu" style="height:200px;"></div>
+		</div>
+	</div>
+	<button onclick="clickButton()" class="btn btn-primary " id="account" style="center">
+				提交
+	</button>
+
+	<script>
+		$(function() {
+			$('#slider-vertical-cute').slider( {
+				orientation:"vertical",
+				range: "min",
+				min: 0,
+				max: 100,
+				value:50,
+				slide: function(event, ui) {
+					$("#cute").val(ui.value);
+				}
+			});
+			$('#cute').val($("#slider-vertical-cute").slider("value"));
+		});
+		$(function() {
+			$('#slider-vertical-hot').slider( {
+				orientation:"vertical",
+				range: "min",
+				min: 0,
+				max: 100,
+				value:50,
+				slide: function(event, ui) {
+					$("#hot").val(ui.value);
+				}
+			});
+			$('#hot').val($("#slider-vertical-hot").slider("value"));
+		});
+		$(function() {
+			$('#slider-vertical-otaku').slider( {
+				orientation:"vertical",
+				range: "min",
+				min: 0,
+				max: 100,
+				value:50,
+				slide: function(event, ui) {
+					$("#otaku").val(ui.value);
+				}
+			});
+			$('#otaku').val($("#slider-vertical-otaku").slider("value"));
+		});
+		$(function() {
+			$('#slider-vertical-liter').slider( {
+				orientation:"vertical",
+				range: "min",
+				min: 0,
+				max: 100,
+				value:50,
+				slide: function(event, ui) {
+					$("#liter").val(ui.value);
+				}
+			});
+			$('#liter').val($("#slider-vertical-liter").slider("value"));
+		});
+		$(function() {
+			$('#slider-vertical-wierd').slider( {
+				orientation:"vertical",
+				range: "min",
+				min: 0,
+				max: 100,
+				value:50,
+				slide: function(event, ui) {
+					$("#wierd").val(ui.value);
+				}
+			});
+			$('#wierd').val($("#slider-vertical-wierd").slider("value"));
+		});
+		$(function() {
+			$('#slider-vertical-aj').slider( {
+				orientation:"vertical",
+				range: "min",
+				min: 0,
+				max: 100,
+				value:50,
+				slide: function(event, ui) {
+					$("#aj").val(ui.value);
+				}
+			});
+			$('#aj').val($("#slider-vertical-aj").slider("value"));
+		});
+		$(function() {
+			$('#slider-vertical-fu').slider( {
+				orientation:"vertical",
+				range: "min",
+				min: 0,
+				max: 100,
+				value:50,
+				slide: function(event, ui) {
+					$("#fu").val(ui.value);
+				}
+			});
+			$('#fu').val($("#slider-vertical-fu").slider("value"));
+		});
+		function clickButton() {
+			window.location.href="/account?cute="+$("#slider-vertical-cute").slider("value")+"&hot="+$("#slider-vertical-hot").slider("value")+"&otaku="+$("#slider-vertical-otaku").slider("value")+"&liter="+$("#slider-vertical-liter").slider("value")+"&wierd="+$("#slider-vertical-wierd").slider("value")+"&aj="+$("#slider-vertical-aj").slider("value")+"&fu="+$("#slider-vertical-fu").slider("value");
+		}
+	</script>
+</div>
+{% endblock %}
+
+{% block title %}
+Video Recommandation
+{% endblock %}

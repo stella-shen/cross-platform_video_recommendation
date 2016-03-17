@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<html xmlns:wb="http://open.weibo.com/wb">
+<div class="main">
+  <div class="primary">
+	  <div class="video-container">
+	  {% if video %}
+	  <embed width="650" height="390"quality="high" allowfullscreen="true" type="application/x-shockwave-flash" src="http://share.acg.tv/flash.swf" flashvars="aid={{video.id}}&page=1" pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash"></embed>
+	  {% endif %}
+   </div>
+   {% if video %}
+    <div id="video-header">
+      <div class="headline">
+		  <a href="{{video.url}}"><h4>{{video.title}}</h4></a>
+      </div>
+  </div>
+  {% endif %}
+    <div id="operation" class="clearfix">
+      <div id="operation-left">
+		  <a href="#">
+			  <wb:share-button appkey="4159940778" addition="full" type="button"></wb:share-button>
+        <!--span><i class="fa fa-weibo fa-lg"></i>分享</span-->
+        </a>
+		<a href="{{url_for('.collect_video', aid=video.id)}}" class="btn btn-primary ">
+        <span><i id="favourite" class="fa fa-star-o fa-lg"></i>收藏</span>
+        </a>
+      </div>
+      <div id="operation-right">
+        <a href="#" class="btn-thumbs">
+        <span><i class="fa fa-thumbs-o-up  fa-lg"></i></span></a>
+        <a href="#" class="btn-thumbs">
+        <span><i class="fa fa-thumbs-o-down  fa-lg"></i></span></a>
+      </div>
+     </div>    
+  </div>
+  <div id="secondary">
+   <div class="sidebar">
+	<ul>
+	{% if recommend_videos %}
+	{% for video in recommend_videos %}
+      <li class="video-list-item">
+	  <a href="{{url_for('play.index', aid=video.id)}}">
+            <span class="thumb"><img src="{{video.pic}}" width="160" height="80"></span>
+			<span class="title">{{video.title}}</span>
+			<span class="info">{{video.play}}次播放</span>
+		</a></li>
+	{% endfor %}
+	{% endif %}
+    </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block title %}
+Video Recommandation
+{% endblock %}

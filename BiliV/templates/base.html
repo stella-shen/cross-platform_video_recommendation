@@ -28,9 +28,9 @@
         <img id="user-avatar" src="{{g.user.image_url}}">
         <span class="name"> {{g.user.screen_name}} </span><span class="caret"></span></a>
       <ul class="dropdown-menu" role="menu">
-		  <li><a href="{{url_for('.account')}}">我的主页</a></li>
+		  <li><a href="{{url_for('account.index')}}">我的主页</a></li>
           <li class="divider"></li>
-		  <li><a href="{{url_for('.logout')}}">退出</a></li>
+		  <li><a href="{{url_for('frontend.logout')}}">退出</a></li>
       </ul>
 	  </li>
     </ul>

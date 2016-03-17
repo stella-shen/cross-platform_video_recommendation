@@ -33,7 +33,7 @@ class WeiboAPI(object):
 		return r.json()
 
 	def get_user_data(self):
-		url = self.build_url('users/show.json', {"uid": self.uid, "count": 100})
+		url = self.build_url('users/show.json', {"uid": self.uid, "access_token": self.access_token})
 		return self.fetch(url)
 
 	def get_weibo_data(self):

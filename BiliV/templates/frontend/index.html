@@ -23,7 +23,7 @@
 		{% if all_videos %}
 		{% for video in all_videos %}
 		<div class="item-wrap">
-			<a href = "{{url_for('.play', aid=video.id)}}">
+			<a href = "{{url_for('play.index', aid=video.id)}}">
 				<img class="feature-image" src="{{video.pic}}" width="320px" height="180px"/>
 				<p class="item-info" style="width:320px; height=20px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">{{video.title}}</p>
 			</a>
@@ -37,7 +37,7 @@
 		{% if comic_videos %}
 		{% for video in comic_videos %}
 		<div class="item-wrap">
-			<a href = "{{url_for('.play', aid=video.id)}}">
+			<a href = "{{url_for('play.index', aid=video.id)}}">
 				<img class="feature-image" src="{{video.pic}}" width="320px" height="180px" />
 				<p class="item-info" style="width:320px; height=20px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">{{video.title}}</p>
 			</a>
@@ -51,7 +51,7 @@
 		{% if series_videos %}
 		{% for video in series_videos %}
 		<div class="item-wrap">
-			<a href = "{{url_for('.play', aid=video.id)}}">
+			<a href = "{{url_for('play.index', aid=video.id)}}">
 				<img class="feature-image" src="{{video.pic}}" width="320" height="180" />
 				<p class="item-info" style="width:320px; height=20px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">{{video.title}}</p>
 			</a>
@@ -65,7 +65,7 @@
 		{% if dance_videos %}
 		{% for video in dance_videos %}
 		<div class="item-wrap">
-			<a href = "{{url_for('.play', aid=video.id)}}">
+			<a href = "{{url_for('play.index', aid=video.id)}}">
 				<img class="feature-image" src="{{video.pic}}" width="320px" height="180px" />
 				<p class="item-info" style="width:320px; height=20px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">{{video.title}}</p>
 			</a>
@@ -79,7 +79,7 @@
 		{% if music_videos %}
 		{% for video in music_videos %}
 		<div class="item-wrap">
-			<a href = "{{url_for('.play', aid=video.id)}}">
+			<a href = "{{url_for('play.index', aid=video.id)}}">
 				<img class="feature-image" src="{{video.pic}}" width="320px" height="180px" />
 				<p class="item-info" style="width:320px; height=20px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">{{video.title}}</p>
 			</a>
@@ -93,7 +93,7 @@
 		{% if movie_videos %}
 		{% for video in movie_videos %}
 		<div class="item-wrap">
-			<a href = "{{url_for('.play', aid=video.id)}}">
+			<a href = "{{url_for('play.index', aid=video.id)}}">
 				<img class="feature-image" src="{{video.pic}}" width="320px" height="180px" />
 				<p class="item-info" style="width:320px; height=20px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">{{video.title}}</p>
 			</a>
@@ -107,7 +107,7 @@
 		{% if wierd_videos %}
 		{% for video in wierd_videos %}
 		<div class="item-wrap">
-			<a href = "{{url_for('.play', aid=video.id)}}">
+			<a href = "{{url_for('play.index', aid=video.id)}}">
 				<img class="feature-image" src="{{video.pic}}" width="320px" height="180px" />
 				<p class="item-info" style="width:320px; height=20px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">{{video.title}}</p>
 			</a>
@@ -121,7 +121,7 @@
 		{% if science_videos %}
 		{% for video in science_videos %}
 		<div class="item-wrap">
-			<a href = "{{url_for('.play', aid=video.id)}}">
+			<a href = "{{url_for('play.index', aid=video.id)}}">
 				<img class="feature-image" src="{{video.pic}}" width="320px" height="180px" />
 				<p class="item-info" style="width:320px; height=20px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">{{video.title}}</p>
 			</a>

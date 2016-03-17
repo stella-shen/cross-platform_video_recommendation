@@ -6,8 +6,6 @@ from sqlalchemy_utils import ArrowType, JSONType
 from SNS import sina
 from flask.ext.login import UserMixin
 import arrow
-#from LikeRelationship import *
-#from RecommendRelationship import *
 
 def analyze_gender(gender):
 	m = {

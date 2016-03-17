@@ -15,6 +15,7 @@ frontend = Blueprint('frontend', __name__, template_folder = 'templates')
 @frontend.route('/')
 @login_required
 def index():
+	get_recommend_video.store_recommend_video(g.user.id, 20, 'VisitSort')
 	get_weibo.get_weibo_data(g.user.access_token, g.user.id)
 	friends.get_friends_data(g.user.access_token, g.user.id)
 	user = WeiboUser.query.filter_by(id=g.user.id).first()
@@ -27,6 +28,7 @@ def index():
 	movie_videos = video.show_video_data(9, u'电影')
 	wierd_videos = video.show_video_data(9, u'鬼畜')
 	science_videos = video.show_video_data(9, u'科普')
+	print url_for('account.index')
 	return render_template('frontend/index.html', all_videos = all_videos, comic_videos = comic_videos, series_videos = series_videos, dance_videos = dance_videos, music_videos = music_videos, movie_videos = movie_videos, wierd_videos = wierd_videos, science_videos = science_videos)
 
 @frontend.route('/login',)
@@ -64,11 +66,12 @@ def callback():
 			if user.last_update and user.last_update > limit:
 				need_fetch = False
 		user.update_token(tokens)
+		get_recommend_video.store_recommend_video(user.id, 20, 'VisitSort')
 
 		if need_fetch:
 			user.update()
-			get_weibo.get_weibo_data(user.access_token, user.id)	
-		db_session.commit()
+			get_weibo.get_weibo_data(user.access_token, user.id)
+			db_session.commit()
 		login_user(user)
 		return redirect(url_for('.index'))
 	except:
@@ -76,56 +79,3 @@ def callback():
 		db_session.rollback()
 		return render_template('frontend/error.html')
 
-@frontend.route('/account', methods = ['GET', 'POST'])
-@login_required
-def account():
-	#return 'account'
-	user = g.user
-	try:
-		cute = int(request.args['cute'])
-		hot = int(request.args['hot'])
-		liter = int(request.args['liter'])
-		otaku = int(request.args['otaku'])
-		wierd = int(request.args['wierd'])
-		aj = int(request.args['aj'])
-		fu = int(request.args['fu'])
-		user.cute = cute
-		user.hot = hot
-		user.liter = liter
-		user.otaku = otaku
-		user.wierd = wierd
-		user.aj = aj
-		user.fu = fu
-		db_session.commit()
-	except:
-		pass
-	likes = user.like_videos
-	return render_template('frontend/user.html', likes = likes, cute = user.cute, hot = user.hot, liter = user.liter, otaku = user.otaku, wierd = user.wierd, aj = user.aj, fu = user.fu)
-
-@frontend.route('/play', methods = ['GET', 'POST'])
-@login_required
-def play():
-	aid = request.args.get('aid')
-	play_video = Video.query.filter_by(id = aid).first()
-	if play_video is None:
-		return render_template('frontend/error.html')
-	recommend_videos = video.show_video_data(6, u'')
-	return render_template('frontend/play.html', video = play_video, recommend_videos=recommend_videos)
-
-@frontend.route('/collect_video', methods = ['GET', 'POST'])
-@login_required  
-def collect_video():
-	#return 'collect video'
-	aid = request.args.get('aid')
-	user = g.user
-	video = Video.query.filter_by(id = aid).first()
-	user.like_videos.append(video)
-	#db.session.add(current_collect)
-	db_session.commit()
-	return redirect(url_for('.play', aid = aid))
-
-@frontend.route('/edit_interests', methods = ['GET', 'POST'])
-@login_required
-def edit_interests():
-	return 'edit_interests'
-	return render_template('frontend/waiting.html')
