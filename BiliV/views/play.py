@@ -6,10 +6,9 @@ from BiliV.controller import video
 from BiliV.models import Video, WeiboUser
 from BiliV import const
 
-play = Blueprint('play', __name__, template_folder = 'templates')
+play = Blueprint('play', __name__, template_folder = 'template')
 
 @play.route('/', methods = ['GET', 'POST'])
-@login_required
 def index():
 	aid = request.args.get('aid')
 	play_video = Video.query.filter_by(id = aid).first()

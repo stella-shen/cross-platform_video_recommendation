@@ -1,40 +1,33 @@
 <!DOCTYPE html>
-<html{% block html_attribs %} lang="zh-CN"{% endblock html_attribs %}>
-  {%- block html %}
-  <head>
-    {%- block head %}
-    <meta charset="utf-8">
-    <title>
-      {% block title %}
-      {{title}}
-      {% endblock title %}
-    </title>
-    {%- block meta %}
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {%- endblock meta %}
-	<script src="{{url_for('static', filename='js/libs/jquery/jquery.js')}}"></script>
-	<script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
-    {%- block style %}
-	<link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
-	<link href="{{url_for('static', filename='css/mystyle.css')}}" rel="stylesheet">
-	<!-- <link href="{{url_for('static', filename='css/font-awesome.min.css')}}" rel="stylesheet"> -->
-    {%- block style_navbar_padding %}
-    {%- endblock style_navbar_padding %}
-    {%- endblock style %}
-
-    {%- block favicons %}
-    {%- endblock favicons %}
-    {%- endblock head %}
-  </head>
-  <body>
-    {%- block body %}
-    {%- block body_content %}
-    {%- endblock body_content %}
-    {%- block bootstrap_js_bottom %}
-	<script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
-    {%- endblock bootstrap_js_bottom %}
-    {%- endblock body %}
-  </body>
-  <!-- Font Awesome is licensed CC-BY-3.0: http://fortawesome.github.com/Font-Awesome -->
-  {%- endblock html %}
+<html{% block html_attribs %} lang="zh-CN"{% endblock %}>
+	{% block html %}
+	<head>
+		{% block head %}
+			<meta charset="UTF-8">
+			{% block meta %}
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			{% endblock %}
+			<title>{% block title %}{{title}}{% endblock %}</title>
+			{% block style %}
+				<link rel=stylesheet href="{{url_for('static', filename='css/reset.css')}}">
+				<link rel=stylesheet href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+			{% endblock %}
+		{% endblock %}
+	</head>
+	
+	<body>
+		{% block body %}
+			<div class="container">
+			{% block body_content %}
+			{% endblock %}
+			</div>
+			{% block bootstrap_js_bottom %}
+				<script src="{{url_for("static", filename="js/libs/jquery/jquery.js")}}"></script>
+				<script src="{{url_for("static", filename="js/bootstrap.min.js")}}"></script>
+			{% endblock %}
+		{% endblock %}
+	</body>
+	{% endblock %}
 </html>
+
+

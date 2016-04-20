@@ -1,138 +1,66 @@
 {% extends "base.html" %}
-{% block content %}
+	{% block title %}videoRecommendation{% endblock %}
+	{% block style %}
+	{{ super() }}
+	<link rel="stylesheet" href="{{url_for('static', filename='font-awesome-4.2.0/css/font-awesome.min.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}">
+	{% endblock %}
+	{% block body_content %}
+	{{ super() }}	
+		<!--video list-->
+		<div class="container container-video">
+  
+ 
+		<div class="row">
+		{% if important_videos %}
+		{% for video in important_videos %}
+		<div class="col-md-6">
+		<div class="panel-img-lg">
+			<a href="{{url_for('play.index', aid=video.id)}}" target="blank"><img src="{{video.pic}}" width="500px" height="280px"></a>
+		  </div>
+		  <div class="panel-info-above">
+			  <p class="title"><a href="{{url_for('play.index', aid=id)}}">{{video.title}}</a></p>
+			  <div class="info"><span>{{video.videotype}}</span></div>
+		  </div>
+		   <div class="like-above like">
+			<input type="checkbox" id="like-1" name="like">
+			  <label for="like-1"></label>
+			</input>
+		  </div>
+		   <div class="trash-above trash">
+			<input type="checkbox" id="trash-1" name="trash">
+			  <label for="trash-1"></label>
+			</input>
+		  </div>
+	  </div> 
+	  {% endfor %}
+	  {% endif %}
+	  </div>
 
-<script src="js/libs/jquery/jquery.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/libs/handlebars/handlebars.js"></script>
-<script src="js/waterfall.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-<ul class="nav nav-tabs" role="tablist" id="type-tab">
-	<li class="active"><a href="#tab-all" role="tab" data-toggle="tab">全站</a></li>
-	<li><a href="#tab-comic" role="tab" data-toggle="tab">动漫</a></li>
-	<li><a href="#tab-series" role="tab" data-toggle="tab">电视剧</a></li>
-	<li><a href="#tab-dance" role="tab" data-toggle="tab">舞蹈</a></li>
-	<li><a href="#tab-music" role="tab" data-toggle="tab">音乐</a></li>
-	<li><a href="#tab-movie" role="tab" data-toggle="tab">电影</a></li>
-	<li><a href="#tab-wierd" role="tab" data-toggle="tab">鬼畜</a></li>
-	<li><a href="#tab-science" role="tab" data-toggle="tab">科技</a></li>
-</ul>
-
-<div class="tab-content">
-	<div class="tab-pane active" id="tab-all">
-		<div class="row feature">
-		{% if all_videos %}
-		{% for video in all_videos %}
-		<div class="item-wrap">
-			<a href = "{{url_for('play.index', aid=video.id)}}">
-				<img class="feature-image" src="{{video.pic}}" width="320px" height="180px"/>
-				<p class="item-info" style="width:320px; height=20px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">{{video.title}}</p>
-			</a>
-			</div>
+	  <div class="row">
+		  {% if common_videos %}
+		  {% for video in common_videos %}
+		  <div class="col-md-3">
+		  <div class="panel-img">
+			  <a href="{{url_for('play.index', aid=video.id)}}" target="blank"><img src="{{video.pic}}" width="235px" height="136px"></a>
+		  </div>
+		  <div class="panel-info">
+			  <p class="title"><a href="{{url_for('play.index', aid=id)}}">{{video.title}}</a></p>
+			  <div class="info"><span>{{video.videotype}}</span></div>
+		  </div>
+		  <div class="like-above-s like">
+			<input type="checkbox" id="like-3" name="like">
+			  <label for="like-3"></label>
+			</input>
+		  </div>
+		   <div class="trash-above-s trash">
+			<input type="checkbox" id="trash-3" name="trash">
+			  <label for="trash-3"></label>
+			</input>
+		</div>
+	</div>
 		{% endfor %}
 		{% endif %}
-		</div>
-	</div>
-	<div class="tab-pane" id="tab-comic">
-		<div class="row feature">
-		{% if comic_videos %}
-		{% for video in comic_videos %}
-		<div class="item-wrap">
-			<a href = "{{url_for('play.index', aid=video.id)}}">
-				<img class="feature-image" src="{{video.pic}}" width="320px" height="180px" />
-				<p class="item-info" style="width:320px; height=20px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">{{video.title}}</p>
-			</a>
-			</div>
-		{% endfor %}
-		{% endif %}	
-		</div>
-	</div>
-	<div class="tab-pane" id="tab-series">
-		<div class="row feature">
-		{% if series_videos %}
-		{% for video in series_videos %}
-		<div class="item-wrap">
-			<a href = "{{url_for('play.index', aid=video.id)}}">
-				<img class="feature-image" src="{{video.pic}}" width="320" height="180" />
-				<p class="item-info" style="width:320px; height=20px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">{{video.title}}</p>
-			</a>
-			</div>
-		{% endfor %}
-		{% endif %}
-		</div>
-	</div>
-	<div class="tab-pane" id="tab-dance">
-		<div class="row feature">
-		{% if dance_videos %}
-		{% for video in dance_videos %}
-		<div class="item-wrap">
-			<a href = "{{url_for('play.index', aid=video.id)}}">
-				<img class="feature-image" src="{{video.pic}}" width="320px" height="180px" />
-				<p class="item-info" style="width:320px; height=20px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">{{video.title}}</p>
-			</a>
-			</div>
-		{% endfor %}
-		{% endif %}	
-		</div>
-	</div>
-	<div class="tab-pane" id="tab-music">
-		<div class="row feature">
-		{% if music_videos %}
-		{% for video in music_videos %}
-		<div class="item-wrap">
-			<a href = "{{url_for('play.index', aid=video.id)}}">
-				<img class="feature-image" src="{{video.pic}}" width="320px" height="180px" />
-				<p class="item-info" style="width:320px; height=20px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">{{video.title}}</p>
-			</a>
-			</div>
-		{% endfor %}
-		{% endif %}	
-		</div>
-	</div>
-	<div class="tab-pane" id="tab-movie">
-		<div class="row feature">
-		{% if movie_videos %}
-		{% for video in movie_videos %}
-		<div class="item-wrap">
-			<a href = "{{url_for('play.index', aid=video.id)}}">
-				<img class="feature-image" src="{{video.pic}}" width="320px" height="180px" />
-				<p class="item-info" style="width:320px; height=20px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">{{video.title}}</p>
-			</a>
-			</div>
-		{% endfor %}
-		{% endif %}	
-		</div>
-	</div>
-	<div class="tab-pane" id="tab-wierd">
-		<div class="row feature">
-		{% if wierd_videos %}
-		{% for video in wierd_videos %}
-		<div class="item-wrap">
-			<a href = "{{url_for('play.index', aid=video.id)}}">
-				<img class="feature-image" src="{{video.pic}}" width="320px" height="180px" />
-				<p class="item-info" style="width:320px; height=20px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">{{video.title}}</p>
-			</a>
-			</div>
-		{% endfor %}
-		{% endif %}	
-		</div>
-	</div>
-	<div class="tab-pane" id="tab-science">
-		<div class="row feature">
-		{% if science_videos %}
-		{% for video in science_videos %}
-		<div class="item-wrap">
-			<a href = "{{url_for('play.index', aid=video.id)}}">
-				<img class="feature-image" src="{{video.pic}}" width="320px" height="180px" />
-				<p class="item-info" style="width:320px; height=20px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;">{{video.title}}</p>
-			</a>
-			</div>
-		{% endfor %}
-		{% endif %}	
-		</div>
-	</div>
-</div>
+	  </div>
+  </div>
 {% endblock %}
-{% block title %}
-主页 - BiliV
-{% endblock %}
-

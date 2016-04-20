@@ -1,5 +1,6 @@
 #! encoding=utf-8
 from flask import Blueprint, render_template, redirect, request, url_for, g
+from sqlalchemy import desc
 from BiliV.foundation import Base, db_session
 from BiliV.models import Video, WeiboUser
 #from BiliV.models.LikeRelationship import like_relationship
@@ -12,32 +13,40 @@ import arrow, random
 
 frontend = Blueprint('frontend', __name__, template_folder = 'templates')
 
-@frontend.route('/')
+@frontend.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
-	get_recommend_video.store_recommend_video(g.user.id, 20, 'VisitSort')
 	get_weibo.get_weibo_data(g.user.access_token, g.user.id)
 	friends.get_friends_data(g.user.access_token, g.user.id)
 	user = WeiboUser.query.filter_by(id=g.user.id).first()
 	all_recommend = user.biliv_recommend_videos
-	all_videos = random.sample(all_recommend, 9)
-	comic_videos = video.show_video_data(9, u'动漫')
-	series_videos = video.show_video_data(9, u'电视剧')
-	dance_videos = video.show_video_data(9, u'舞蹈')
-	music_videos = video.show_video_data(9, u'音乐')
-	movie_videos = video.show_video_data(9, u'电影')
-	wierd_videos = video.show_video_data(9, u'鬼畜')
-	science_videos = video.show_video_data(9, u'科普')
-	print url_for('account.index')
-	return render_template('frontend/index.html', all_videos = all_videos, comic_videos = comic_videos, series_videos = series_videos, dance_videos = dance_videos, music_videos = music_videos, movie_videos = movie_videos, wierd_videos = wierd_videos, science_videos = science_videos)
+	video_type = request.args['type']
+	common_videos = random.sample(all_recommend, 30)
+	if video_type=='all':
+		commmon_videos = random.sample(all_recommend, 10)
+	elif video_type=='comic':
+		common_videos = video.show_video_data(10, u'动漫')
+	elif video_type=='series':
+		common_videos = video.show_video_data(10, u'电视剧')
+	elif video_type == 'movie':
+		common_videos = video.show_video_data(10, u'电影')
+	elif video_type=='wierd':
+		common_videos = video.show_video_data(10, u'鬼畜')
+	important_videos = common_videos[:2]
+	common_videos = common_videos[2:10]
+	return render_template('frontend/index.html', important_videos = important_videos, common_videos = common_videos)
 
-@frontend.route('/login',)
+@frontend.route('/login')
 def login():
 	if g.user is not None and g.user.is_authenticated():
-		return redirect(url_for('.index'))
+		return redirect(url_for('.index', type='all'))
 	auth = sina.WeiboOAuth(const.APP_KEY, const.APP_SECRET)
 	authorize_url = auth.get_auth_url(const.CALLBACK_URL)
-	return render_template('frontend/login.html', authorize_url = authorize_url)
+	videos = Video.query.order_by(desc(Video.play)).all()
+	videos = videos[:100]
+	videos = random.sample(videos, 8)
+	print videos
+	return render_template('frontend/login.html', authorize_url = authorize_url, videos = videos)
 
 @frontend.route('/logout')
 @login_required
@@ -73,9 +82,17 @@ def callback():
 			get_weibo.get_weibo_data(user.access_token, user.id)
 			db_session.commit()
 		login_user(user)
-		return redirect(url_for('.index'))
+		return redirect(url_for('.index', type='all'))
 	except:
 		raise
 		db_session.rollback()
 		return render_template('frontend/error.html')
 
+@frontend.route('/hot')
+def hot():
+	auth = sina.WeiboOAuth(const.APP_KEY, const.APP_SECRET)
+	authorize_url = auth.get_auth_url(const.CALLBACK_URL)
+	videos = Video.query.order_by(desc(Video.play)).all()
+	videos = videos[:100]
+	videos = random.sample(videos, 16)
+	return render_template('frontend/hot.html', authorize_url = authorize_url, videos = videos)

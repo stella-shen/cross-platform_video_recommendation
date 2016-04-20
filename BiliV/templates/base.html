@@ -1,65 +1,83 @@
 {% extends "bootstrap_base.html" %}
-
-{%- block style_navbar_padding %}
-<link rel="stylesheet" href="{{url_for('static', filename='css/reset.css')}}">
-<link rel="stylesheet" href="{{url_for('static', filename='css/waterfall.css')}}">
-{%- endblock style_navbar_padding %}
-
 {% block body_content %}
-<nav class="header navbar navbar-default navbar-fixed-top g-header" role="navigation">
+{% if g.user and g.user.is_authenticated() %}
+{% block head_navbar %}
+<nav class="header navbar navbar-default navbar-fixed-top " role="navigation">
 <div class="container">
-  <!-- Brand and toggle get grouped for better mobile display -->
-  <div class="navbar-header">
-    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-	<a class="header-logo" href="{{url_for('.index')}}"></a>
-  </div>
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+			<a class="header-logo" href="{{url_for('frontend.index', type='all')}}"></a>
+	</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav nav-tabs" role="tablist" id="type-tab">
+				<li><a href="{{url_for('frontend.index', type='all')}}" role="tab">全站</a></li>
+				<li><a href="{{url_for('frontend.index', type='comic')}}" role="tab">动画</a></li>
+				<li><a href="{{url_for('frontend.index', type='series')}}" role="tab">电视剧</a></li>
+				<li><a href="{{url_for('frontend.index', type='movie')}}" role="tab">电影</a></li>
+				<li><a href="{{url_for('frontend.index', type='wierd')}}" role="tab">鬼畜</a></li>
+				<li><a href="#" role="tab">发现</a></li>
+			
+			</ul>
+			
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{g.user.image_url}}">
+					<span class="name">{{g.user.screen_name}}</span><span class="caret"></span></a>
+				  <ul class="dropdown-menu" role="menu">
+					  <li><a href="{{url_for('account.index')}}">My Homepage</a></li>
+					<li class="divider"></li>
+					<li><a href="{{url_for('frontend.logout')}}">Log out</a></li>
+				  </ul>
+				</li>
+			</ul>
+			<!--likes/deletes/refresh-->
+		  <ul class="nav navbar-nav navbar-right">
+			<li class="dropdown">
+			   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+				<button type="button" class="btn btn-icon" aria-label="Left Align">
+				<span class="fa fa-heart" aria-hidden="true"></span>
+				</button><span id="like-counts">0</span></a>
 
-  <!-- Collect the nav links, forms, and other content for toggling -->
-  {% if g.user and g.user.is_authenticated() %}
-  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    <ul class="nav navbar-nav navbar-right">
-      <li class="dropdown">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        <img id="user-avatar" src="{{g.user.image_url}}">
-        <span class="name"> {{g.user.screen_name}} </span><span class="caret"></span></a>
-      <ul class="dropdown-menu" role="menu">
-		  <li><a href="{{url_for('account.index')}}">我的主页</a></li>
-          <li class="divider"></li>
-		  <li><a href="{{url_for('frontend.logout')}}">退出</a></li>
-      </ul>
-	  </li>
-    </ul>
-  </div><!-- /.navbar-collapse -->
-  {% endif %}
-</div><!-- /.container-fluid -->
+				<ul class="dropdown-menu dropdown-icon" role="menu">
+				<li><div><h5><a href="play.html">白日梦想家</a></h5></div>
+				<li><div><h5><a href="#">夏目友人帐</a></h5></div></li>
+				<li><div><h5><a href="#">奥斯卡最佳电影【聚焦】</a></h5></div></li>
+				<li><div><h5><a href="#">蜡笔小新</a></h5></div></li>
+				<li><div><h5><a href="#">校园迷糊大王</a></h5></div></li>
+				<li><div><h5><a href="#">独特中国味</a></h5></div></li>
+				<li><div class="center-link"><h5><a href="user.html#likes">查看全部 »</a></h5></div></li>
+			  </ul>
+			</li>
+			<li>
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+				<button type="button" class="btn btn-icon" aria-label="Left Align">
+				<span class="fa fa-trash" aria-hidden="true"></span>
+				</button><span id="unlike-counts">0</span></a>
+				<ul class="dropdown-menu dropdown-icon" role="menu">
+				<li><div><h5><a href="play.html">白日梦想家</a></h5></div>
+				<li><div><h5><a href="#">夏目友人帐</a></h5></div></li>
+				<li><div><h5><a href="#">奥斯卡最佳电影【聚焦】</a></h5></div></li>
+				<li><div><h5><a href="#">蜡笔小新</a></h5></div></li>
+				<li><div><h5><a href="#">校园迷糊大王</a></h5></div></li>
+				<li><div><h5><a href="#">独特中国味</a></h5></div></li>
+			  </ul>
+			</li>
+			<li><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+				<button type="button" class="btn btn-icon" aria-label="Left Align">
+				<span class="fa fa-refresh" aria-hidden="true"></span></button>
+				</a>
+			</li>
+		  </ul>
+
+	  </div><!-- /.container-fluid -->
 </nav>
-
-<div id="header-spacer"> </div>
-
-{% with messages = get_flashed_messages(with_categories=True) %}
-{% if messages %}
-<div class="container">
-  <div id="alert">
-    {% for category, message in messages %}
-    <div class="alert alert-{{category|default('info')}}">
-      {{ message }}
-    </div>
-    {% endfor %}
-  </div>
-</div>
-{% endif %}
-{% endwith %}
-
-<div class="container">
-  {% block content %}{% endblock %}
-</div>
 {% endblock %}
-<script src="js/libs/jquery/jquery.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/libs/handlebars/handlebars.js"></script>
-<script src="js/waterfall.min.js"></script>
+{% endif %}
+{% endblock %}
+
+

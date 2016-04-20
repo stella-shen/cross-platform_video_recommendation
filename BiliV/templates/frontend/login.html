@@ -1,20 +1,45 @@
 {% extends "base.html" %}
-{% block content %}
-<link href="{{url_for('static', filename='css/login.css')}}" rel="stylesheet">
-<div class="container">
-        <div class="headline">
-        <div class="logo"></div>
-        <div class="loginbtn">
-			<a href={{authorize_url}} class="btn btn-primary btn-weibo">
-      <span>
-        <i class="fa fa-weibo fa-lg"></i>使用微博登陆
-      </span>
-       </a>
-        </div>
-       </div>
-    </div>
+{% block style %}
+{{ super() }}
+<link  rel=stylesheet type=text/css href="{{url_for('static', filename='css/login.css')}}">
+<link rel=stylesheet type=text/css href="{{url_for('static', filename='font-awesome-4.2.0/css/font-awesome.min.css')}}">
 {% endblock %}
+{% block title %}Login{% endblock %}
+{% block body_content %}
+<!--登录-->
+	<div id="header">
+		<div class="logo"></div>
+		<div class="login-btn">
+			<a href="{{authorize_url}}" class="btn btn-primary btn-weibo">
+				<span><i class="fa fa-weibo fa-lg"></i>请使用微博登录</span>
+			</a>
+		</div>
+		<p class="slogan">登录以获得个性化推荐</p>
+	</div>
 
-{% block title %}
-请登录 - BiliV
+	<!--热门视频-->
+	<div id="video">
+		<div class="container">
+			<div class="row">
+				{% if videos %}
+				{% for video in videos %}
+				<div class="col-md-3">
+				<div class="panel-img">
+					<a href="{{url_for('play.index', aid=video.id)}}"><img src="{{video.pic}}" width="240px" height="120px"></a>
+				</div>
+				<div class="panel-info">
+					<span class="title"><a href="{{url_for('play.index', aid=video.id)}}">{{video.title}}</a></span>
+				</div>
+				</div>
+				{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+
+		<!--更多热门视频-->
+		<div class="wrap">
+			<a href="{{url_for('frontend.hot')}}" class="link" >更多热门视频 >></a>
+		</div>
+			
+	</div>
 {% endblock %}

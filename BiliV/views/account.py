@@ -4,7 +4,7 @@ from flask.ext.login import login_required
 from BiliV.foundation import Base, db_session
 from BiliV.models import Video, WeiboUser
 
-account = Blueprint('account', __name__, template_folder = 'templates')
+account = Blueprint('account', __name__, template_folder = 'template')
 
 @account.route('/', methods = ['GET', 'POST'])
 @login_required

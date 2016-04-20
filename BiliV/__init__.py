@@ -7,7 +7,8 @@ from BiliV.models import WeiboUser
 DEFAULT_MODULES = [
 	views.frontend,
 	views.account,
-	views.play
+	views.play,
+#	views.discover
 ]
 
 def create_app():
