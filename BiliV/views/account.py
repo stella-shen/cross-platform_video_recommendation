@@ -2,7 +2,10 @@
 from flask import Blueprint, render_template, request, redirect, url_for, g
 from flask.ext.login import login_required
 from BiliV.foundation import Base, db_session
-from BiliV.models import Video, WeiboUser
+from BiliV.models import Video, WeiboUser, LikeRelation, Idfvoc
+import BiliV.redisconfig as rc
+import redis as redis_connect
+import BiliV.const
 
 account = Blueprint('account', __name__, template_folder = 'template')
 
@@ -10,26 +13,25 @@ account = Blueprint('account', __name__, template_folder = 'template')
 @login_required
 def index():
 	user = g.user
-	try:
-		cute = int(request.args['cute'])
-		hot = int(request.args['hot'])
-		liter = int(request.args['liter'])
-		otaku = int(request.args['otaku'])
-		wierd = int(request.args['wierd'])
-		aj = int(request.args['aj'])
-		fu = int(request.args['fu'])
-		user.cute = cute
-		user.hot = hot
-		user.liter = liter
-		user.otaku = otaku
-		user.wierd = wierd
-		user.aj = aj
-		user.fu = fu
-		db_session.commit()
-	except:
-		pass
-	likes = user.like_videos
-	return render_template('account/account.html', likes = likes, cute = user.cute, hot = user.hot, liter = user.liter, otaku = user.otaku, wierd = user.wierd, aj = user.aj, fu = user.fu)
+	like_list = LikeRelation.query.filter_by(weibo_user_id = g.user.id).filter_by(score = 3).all()
+	likes = list()
+	for l in like_list:
+		v = Video.query.filter_by(id = l.video_id).first()
+		likes.append(v)
+	r = redis_connect.Redis(host = rc.DATA_REDIS_HOST, port = rc.DATA_REDIS_PORT, db = rc.DATA_USER_SPARSE_TFIDF_DB)
+	key_tuples = r.lrange(g.user.id, 0, 10)
+	words = Idfvoc.query.all()
+	key_words = dict()
+	for tp in key_tuples:
+		tp = tp[1 : -1]
+		tp_list = tp.split(',')
+		word_num = int(tp_list[0].strip()) 
+		weight = float(tp_list[1].strip())
+		word = words[word_num].word
+		key_words[word] = weight
+		print "here"
+		print key_words
+	return render_template('account/account.html', key_words = key_words, likes = likes)
 
 @account.route('/edit_interests', methods = ['GET', 'POST'])
 @login_required

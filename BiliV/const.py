@@ -23,3 +23,8 @@ MOVIE = 23
 WIERD = 119
 NEW_COMIC = 33
 
+#for video score
+DISLIKE = 1
+PLAY = 2
+LIKE = 3
+

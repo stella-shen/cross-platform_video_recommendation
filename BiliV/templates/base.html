@@ -11,14 +11,14 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-			<a class="header-logo" href="{{url_for('frontend.index', type='all')}}"></a>
+			<a class="header-logo" href="{{url_for('frontend.index', type='rand')}}"></a>
 	</div>
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav nav-tabs" role="tablist" id="type-tab">
-				<li><a href="{{url_for('frontend.index', type='all')}}" role="tab">全站</a></li>
-				<li><a href="{{url_for('frontend.index', type='comic')}}" role="tab">动画</a></li>
-				<li><a href="{{url_for('frontend.index', type='series')}}" role="tab">电视剧</a></li>
-				<li><a href="{{url_for('frontend.index', type='movie')}}" role="tab">电影</a></li>
+				<li><a href="{{url_for('frontend.index', type='rand')}}" role="tab">随机算法</a></li>
+				<li><a href="{{url_for('frontend.index', type='visitsort')}}" role="tab">热度</a></li>
+				<li><a href="{{url_for('frontend.index', type='tfidf')}}" role="tab">TF-IDF</a></li>
+				<li><a href="{{url_for('frontend.index', type='lda')}}" role="tab">LDA</a></li>
 				<li><a href="{{url_for('frontend.index', type='wierd')}}" role="tab">鬼畜</a></li>
 				<li><a href="#" role="tab">发现</a></li>
 			

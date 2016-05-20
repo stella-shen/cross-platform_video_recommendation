@@ -2,8 +2,7 @@
 from flask import Blueprint, render_template, redirect, request, url_for, g
 from sqlalchemy import desc
 from BiliV.foundation import Base, db_session
-from BiliV.models import Video, WeiboUser
-#from BiliV.models.LikeRelationship import like_relationship
+from BiliV.models import Video, WeiboUser, RecommendRelation
 from BiliV.algorithm import algorithm
 from BiliV.controller import video, get_recommend_video, get_weibo, friends
 from flask.ext.login import login_user, logout_user, login_required
@@ -16,24 +15,36 @@ frontend = Blueprint('frontend', __name__, template_folder = 'templates')
 @frontend.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
-	get_weibo.get_weibo_data(g.user.access_token, g.user.id)
-	friends.get_friends_data(g.user.access_token, g.user.id)
-	user = WeiboUser.query.filter_by(id=g.user.id).first()
-	all_recommend = user.biliv_recommend_videos
+	#get_weibo.get_weibo_data(g.user.access_token, g.user.id)
+	#friends.get_friends_data(g.user.access_token, g.user.id)
+	#user = WeiboUser.query.filter_by(id=g.user.id).first()
 	video_type = request.args['type']
-	common_videos = random.sample(all_recommend, 30)
-	if video_type=='all':
-		commmon_videos = random.sample(all_recommend, 10)
-	elif video_type=='comic':
-		common_videos = video.show_video_data(10, u'动漫')
-	elif video_type=='series':
-		common_videos = video.show_video_data(10, u'电视剧')
-	elif video_type == 'movie':
-		common_videos = video.show_video_data(10, u'电影')
+	common_videos = list()
+	if video_type=='rand':
+		all_videos = Video.query.all()
+		common_videos = common_videos + random.sample(all_videos, 30)
+	elif video_type=='visitsort':
+		common_list = RecommendRelation.query.filter_by(weibo_user_id = g.user.id).filter_by(algorithm = 'VisitSort').all()
+		for cl in common_list:
+			v = Video.query.filter_by(id = cl.bili_video_id).first()
+			common_videos.append(v)
+	elif video_type=='tfidf':
+		common_list = RecommendRelation.query.filter_by(weibo_user_id = g.user.id).filter_by(algorithm = 'docmatching').all()
+		for cl in common_list:
+			v = Video.query.filter_by(id = cl.bili_video_id).first()
+			common_videos.append(v)
+	elif video_type == 'lda':
+		common_list = RecommendRelation.query.filter_by(weibo_user_id = g.user.id).filter_by(algorithm = 'ldamatching').all()
+		for cl in common_list:
+			v = Video.query.filter_by(id = cl.bili_video_id).first()
+			common_videos.append(v)
 	elif video_type=='wierd':
 		common_videos = video.show_video_data(10, u'鬼畜')
-	important_videos = common_videos[:2]
-	common_videos = common_videos[2:10]
+	important_videos = common_videos[:10]
+	important_videos = random.sample(important_videos, 2)
+	for v in important_videos:
+		common_videos.remove(v)
+	#common_videos = random.sample(common_videos, 8)
 	return render_template('frontend/index.html', important_videos = important_videos, common_videos = common_videos)
 
 @frontend.route('/login')
@@ -45,7 +56,6 @@ def login():
 	videos = Video.query.order_by(desc(Video.play)).all()
 	videos = videos[:100]
 	videos = random.sample(videos, 8)
-	print videos
 	return render_template('frontend/login.html', authorize_url = authorize_url, videos = videos)
 
 @frontend.route('/logout')

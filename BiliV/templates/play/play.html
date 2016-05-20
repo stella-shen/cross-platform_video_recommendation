@@ -2,21 +2,33 @@
 {% block style %}
 {{ super() }}
 <link href="{{url_for('static', filename='css/play.css')}}", rel="stylesheet">
+<link rel="stylesheet" href="{{url_for('static', filename='font-awesome-4.2.0/css/font-awesome.min.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}">
+
 {% endblock %}
 {% block body_content %}
 {{ super() }}
-<div class="main">
-  <div class="primary">
+<div class="primary">
 	{% if video %}
     <div class="video-container">
 		<embed width="650" height="390"quality="high" allowfullscreen="true" type="application/x-shockwave-flash" src="http://share.acg.tv/flash.swf" flashvars="aid={{video.id}}&page=1" pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash"></embed>
     </div>
 
     <div id="video-header">
-      <div class="headline">
-		  <a href="{{video.url}}"><h4>{{video.title}}</h4></a>
-      </div>
-  </div>
+		<div class="headline">	
+			<a href="{{video.url}}"><h3>{{video.title}}</h3></a>
+		</div> 
+	</div>
+	<div clas="like">
+		<a href="{{url_for('play.like_video', aid=video.id)}}">
+			<h4>Like</h4>
+		</a>
+	</div>
+	<div class="trash">
+		<a href="{{url_for('play.dislike_video', aid=video.id)}}"> 
+			<h4>Dislike</h4>
+		</a>
+	</div>
   {% endif %}
   </div>
 <div id="secondary">
@@ -34,6 +46,31 @@
 	{% endif %}
     </ul>
     </div>
-  </div>  
-</div>
+</div> 
+{% block bootstrap_js_bottom %}
+{{ super() }}
+<script>
+	$(function(){
+	$(document).ready(function() {
+		$(this).find('.fa fa-refresh').on('click', function(){
+			var url = window.location.href;
+			var data = {type:1};
+			$.ajax({
+				type : "get",
+				async : false,
+				url : url,
+				data : data,
+				timeout : 1000,
+				success : function(){
+					$('#primary').datagrid('reload');
+				},
+				error : function() {
+					alert("Failed to refresh. Please try again later!");
+				},
+			});
+		});
+	});
+});
+</script>
+{% endblock %}
 {% endblock %}

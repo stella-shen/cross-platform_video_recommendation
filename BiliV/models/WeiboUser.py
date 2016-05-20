@@ -34,6 +34,7 @@ class LikeRelation(Base):
 	id = Column(Integer, primary_key = True)
 	video_id = Column(Integer, ForeignKey('bilibili_video_info.id'))
 	weibo_user_id = Column(BigInteger, ForeignKey('biliv_weibo_user.id'))
+	score = Column(Integer, default = 0)
 
 class WeiboRelation(Base):
 	__tablename__ = 'biliv_weibo_relation'

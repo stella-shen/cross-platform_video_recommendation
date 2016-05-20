@@ -63,4 +63,30 @@
 		{% endif %}
 	  </div>
   </div>
+{% block bootstrap_js_bottom %}
+{{ super() }}
+<script>
+	$(function(){
+	$(document).ready(function() {
+		$(this).find('.open').on('click', function(){
+			var url = window.location.href;
+			var data = {type:1};
+			$.ajax({
+				type : "get",
+				async : false,
+				url : url,
+				data : data,
+				timeout : 1000,
+				success : function(){
+					$('#container.container-video').datagrid('reload');
+				},
+				error : function() {
+					alert("Failed to refresh. Please try again later!");
+				},
+			});
+		});
+	});
+});
+</script>
+{% endblock %}
 {% endblock %}

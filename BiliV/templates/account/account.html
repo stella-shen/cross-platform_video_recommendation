@@ -46,25 +46,9 @@
       ////////////////////////////////////////////////////////////// 
       ////////////////////////// Data ////////////////////////////// 
            var data = [
-            
-            {axis:"Battery Life",value:0.22, tag:"萝莉控"},
-            {axis:"Brand",value:0.28, tag:"鬼畜"},
-            {axis:"Contract Cost",value:0.29, tag:"燃"},
-            {axis:"Design And Quality",value:0.17, tag:"摇滚"},
-            {axis:"Have Internet Connectivity",value:0.22, tag:"小清新"},
-            {axis:"Large Screen",value:0.02, tag:"技术宅"},
-            {axis:"Price Of Device",value:0.21, tag:"动漫"},
-            {axis:"To Be A Smartphone",value:0.50, tag:"90后"},     
-           
-            {axis:"Battery Life",value:0.27, tag:"奇葩"},
-            {axis:"Brand",value:0.16, tag:"催泪"},
-            {axis:"Contract Cost",value:0.35, tag:"文艺"},
-            {axis:"Design And Quality",value:0.13, tag:"搞笑"},
-            {axis:"Have Internet Connectivity",value:0.20, tag:"萌系"},
-            {axis:"Large Screen",value:0.13, tag:"致郁"},
-            {axis:"Price Of Device",value:0.35, tag:"治愈"},
-            {axis:"To Be A Smartphone",value:0.38, tag:"我是歌手"},
-            
+		   {% for word, weight in key_words.items() %}
+				{axis:"Battery Life",value:{{ weight }}, tag:"{{ word }}"},
+			{% endfor %}
           ];
        
       ////////////////////////////////////////////////////////////// 
@@ -92,8 +76,8 @@
     <div role="tabpanel" class="tab-pane" id="likes">
 
 		<div class="row">
-			{% if videos %}
-			{% for video in videos %}
+			{% if likes %}
+			{% for video in likes %}
 		<div class="col-md-3">
       <div class="panel-img">
 		  <a href="{{url_for('play.index', aid=video.id)}}" target="blank"><img src="{{video.pic}}" width="235px" height="136px"></a>
