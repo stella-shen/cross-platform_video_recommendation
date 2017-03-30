@@ -5,6 +5,11 @@
 	<link rel="stylesheet" href="{{url_for('static', filename='font-awesome-4.2.0/css/font-awesome.min.css')}}">
 	<link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}">
 	{% endblock %}
+	{% block script %}
+		{{ super() }}
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+		<script src={{url_for('static', filename='js/index.js')}}></script>
+	{% endblock %}
 	{% block body_content %}
 	{{ super() }}	
 		<!--video list-->
@@ -19,12 +24,16 @@
 			<a href="{{url_for('play.index', aid=video.id)}}" target="blank"><img src="{{video.pic}}" width="500px" height="280px"></a>
 		  </div>
 		  <div class="panel-info-above">
-			  <p class="title"><a href="{{url_for('play.index', aid=id)}}">{{video.title}}</a></p>
+			  <p class="title"><a href="{{url_for('play.index', aid=video.id)}}">{{video.title}}</a></p>
 			  <div class="info"><span>{{video.videotype}}</span></div>
 		  </div>
 		   <div class="like-above like">
 			<input type="checkbox" id="like-1" name="like">
-			  <label for="like-1"></label>
+				<label for="like-1">
+					<script>
+						$.post("/like_post/" + video.id)
+					</script>
+				</label>
 			</input>
 		  </div>
 		   <div class="trash-above trash">
@@ -63,8 +72,7 @@
 		{% endif %}
 	  </div>
   </div>
-{% block bootstrap_js_bottom %}
-{{ super() }}
+
 <script>
 	$(function(){
 	$(document).ready(function() {
@@ -87,6 +95,4 @@
 		});
 	});
 });
-</script>
-{% endblock %}
 {% endblock %}

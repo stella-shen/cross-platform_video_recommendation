@@ -34,7 +34,7 @@ body{
 #tabs .nav-tabs{
     display: block;
     float: none;
-    width: 210px;
+    width: 140px;
     margin: 0 auto;
     font-size: 20px;
 }
@@ -62,7 +62,7 @@ body{
 }
 .btn-round{
     position: absolute;
-    top: 206px;
+    top: 218px;
     left: 310px;
     width: 80px;
     height: 80px;

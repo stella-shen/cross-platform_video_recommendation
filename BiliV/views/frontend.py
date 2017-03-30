@@ -9,6 +9,7 @@ from flask.ext.login import login_user, logout_user, login_required
 from BiliV import const
 from SNS import sina
 import arrow, random
+import os
 
 frontend = Blueprint('frontend', __name__, template_folder = 'templates')
 
@@ -40,10 +41,12 @@ def index():
 			common_videos.append(v)
 	elif video_type=='wierd':
 		common_videos = video.show_video_data(10, u'鬼畜')
-	important_videos = common_videos[:10]
-	important_videos = random.sample(important_videos, 2)
-	for v in important_videos:
-		common_videos.remove(v)
+	important_videos = list()
+	if len(common_videos) != 0:
+		important_videos = common_videos[:10]
+		important_videos = random.sample(important_videos, 2)
+		for v in important_videos:
+			common_videos.remove(v)
 	#common_videos = random.sample(common_videos, 8)
 	return render_template('frontend/index.html', important_videos = important_videos, common_videos = common_videos)
 
@@ -53,8 +56,12 @@ def login():
 		return redirect(url_for('.index', type='all'))
 	auth = sina.WeiboOAuth(const.APP_KEY, const.APP_SECRET)
 	authorize_url = auth.get_auth_url(const.CALLBACK_URL)
-	videos = Video.query.order_by(desc(Video.play)).all()
-	videos = videos[:100]
+	videos_list = RecommendRelation.query.filter_by(algorithm='VisitSort').all()
+	videos = list()
+	for v in videos_list:
+		video = Video.query.filter_by(id = v.bili_video_id).first()
+		if video not in videos:
+			videos.append(video)
 	videos = random.sample(videos, 8)
 	return render_template('frontend/login.html', authorize_url = authorize_url, videos = videos)
 
@@ -85,8 +92,7 @@ def callback():
 			if user.last_update and user.last_update > limit:
 				need_fetch = False
 		user.update_token(tokens)
-		get_recommend_video.store_recommend_video(user.id, 20, 'VisitSort')
-
+		#Need to add command
 		if need_fetch:
 			user.update()
 			get_weibo.get_weibo_data(user.access_token, user.id)
@@ -102,7 +108,24 @@ def callback():
 def hot():
 	auth = sina.WeiboOAuth(const.APP_KEY, const.APP_SECRET)
 	authorize_url = auth.get_auth_url(const.CALLBACK_URL)
-	videos = Video.query.order_by(desc(Video.play)).all()
-	videos = videos[:100]
+	videos_list = RecommendRelation.query.filter_by(algorithm='VisitSort').all()
+	videos = list()
+	for v in videos_list:
+		video = Video.query.filter_by(id = v.bili_video_id).first()
+		if video not in videos:
+			videos.append(video)
 	videos = random.sample(videos, 16)
 	return render_template('frontend/hot.html', authorize_url = authorize_url, videos = videos)
+
+@frontend.route('/like_post/<video_id>', methods = ['GET', 'POST'])
+def like_post(video_id):
+	print video_id
+	videos = LikeRelation.query.filter_by(video_id = video_id).all()
+	like_relation = videos.query.filter_by(weibo_user_id = g.user.id).first()
+	if like_relation is None:
+		like_relation = LikeRelation(video_id = video_id, weibo_user_id = g.user.id, score = 3)
+		db.session.add(like_relation)
+		db.session.commit()
+	else:
+		db.session.delete(like_relation)
+		db.session.commit()

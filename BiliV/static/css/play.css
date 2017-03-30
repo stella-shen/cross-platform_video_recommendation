@@ -129,7 +129,8 @@ h3{
     letter-spacing:2px;
     padding: 6px 20px;
     font-family:Arial,sans-serif;
-    text-decoration: none; 
+    text-decoration: none;
+    background-color: #4c3f53;
 }
 
 .btn-thumbs{

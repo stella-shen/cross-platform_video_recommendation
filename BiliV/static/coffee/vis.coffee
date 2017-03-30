@@ -276,7 +276,7 @@ Bubbles = () ->
      d3.select(this.firstChild).classed("bubble-hover", (p) -> p == d)
        
         .transition()
-        .duration(60)
+        .duration(100)
         .ease("sin")
         .attr("r",(d) -> 1.1*rScale(rValue(d)))
 
@@ -286,7 +286,7 @@ Bubbles = () ->
   mouseout = (d) ->
    d3.select(this.firstChild).classed("bubble-hover", false)
       .transition()
-      .duration(60)
+      .duration(100)
       .ease("sin")
       .attr("r",(d) ->rScale(rValue(d)))
 

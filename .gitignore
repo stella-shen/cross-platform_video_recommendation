@@ -2,4 +2,6 @@
 *.pyc
 /app.db
 /node_modules
+/BiliV/static
 /tmp
+/BiliV/algorithm/deep_recommendation

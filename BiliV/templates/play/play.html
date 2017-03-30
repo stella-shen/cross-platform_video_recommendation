@@ -16,18 +16,21 @@
 
     <div id="video-header">
 		<div class="headline">	
-			<a href="{{video.url}}"><h3>{{video.title}}</h3></a>
+			<h3><a href="{{video.url}}">{{video.title}}</h3></a>
 		</div> 
-	</div>
-	<div clas="like">
-		<a href="{{url_for('play.like_video', aid=video.id)}}">
-			<h4>Like</h4>
-		</a>
-	</div>
-	<div class="trash">
-		<a href="{{url_for('play.dislike_video', aid=video.id)}}"> 
-			<h4>Dislike</h4>
-		</a>
+		<div clas="like-above-r like">
+			<input type="checkbox" id="like-1" name="like">
+				<label for="like-1"></label>
+			</input>
+		</div>
+		<div class="trash-above-r trash">
+			<input type="checkbox" id="trash-1" name="trash"> 
+				<label for="trash-1"></label>
+			</input>
+		</div>
+		<button type="button" class="btn-r">
+			<span class="fa fa-weibo" aria-hidden="true"></span>
+		</button>
 	</div>
   {% endif %}
   </div>
@@ -47,8 +50,6 @@
     </ul>
     </div>
 </div> 
-{% block bootstrap_js_bottom %}
-{{ super() }}
 <script>
 	$(function(){
 	$(document).ready(function() {
@@ -72,5 +73,4 @@
 	});
 });
 </script>
-{% endblock %}
 {% endblock %}
